@@ -10,8 +10,7 @@ exports.showBetItemsByMatch = function(req, res) {
     }
     res.render('match', {
       items: items,
-      no: no,
-      user: req.session.user});
+      no: no});
   });
 }
 

@@ -11,6 +11,6 @@ exports.index = function(req, res) {
       else
         return 0;
     })
-    res.render('board', {items:items, user: req.session.user});
+    res.render('board', {items:items});
   }) 
 }

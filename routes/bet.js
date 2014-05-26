@@ -22,7 +22,7 @@ exports.showVoteResults = function(req, res) {
         item["score1"] = score.split(":")[0];
         item["score2"] = score.split(":")[1];
       });
-      res.render('bet', {items: items, user: req.session.user});
+      res.render('bet', {items: items});
     });
   });
 }

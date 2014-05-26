@@ -1,7 +1,6 @@
 var mongo = require('../mongo');
 
 exports.login = function(req, res) {
-  req.session.lastPage = "/login";
   res.render('login');
 }
 
@@ -21,7 +20,6 @@ exports.verifyUser = function(req, res) {
     else if (item != null) {
       if (item.password === password) {
         req.session.user = user;
-        res.user = user;
         return res.redirect('/');
       }
       else {

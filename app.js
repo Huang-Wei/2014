@@ -27,6 +27,10 @@ app.use(express.session({
   }),
   secret: 'hweicdl@cn.ibm.com'
 }));
+app.use(function(req, res, next) {
+  res.locals.user = req.session.user;
+  next();
+});
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(function(req, res, next) {

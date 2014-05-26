@@ -6,6 +6,6 @@ exports.index = function(req, res) {
       console.log(err);
       return;
     }
-    res.render('index', {items: items, user: req.session.user});
+    res.render('index', {items: items});
   });
 };
