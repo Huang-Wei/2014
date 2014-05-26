@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  h1 竞猜积分榜：
+
+  table
+    thead
+      th 排名
+      th 竞猜者
+      th 猜中比分
+      th 猜中结果
+      th 总得分
+      th 猜错
+    tbody
+    each item, index in items
+      tr()
+        td #{index+1}
+        td #{item.showname}
+        td #{item.win}
+        td #{item.draw}
+        td #{item.betscore}
+        if item.lose
+          td #{item.lose}
+        else
+          td 0
+        

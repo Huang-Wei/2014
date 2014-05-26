@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h1 登录
+
+  form(action="/user/login" method="post")
+    span 用户名：
+    input(type="text", name="user")
+    span 密码：
+    input(type="password", name="password")
+    button(type='submit') 登录

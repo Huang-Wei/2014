@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  h1 我的竞猜结果：
+
+  table
+    thead
+      th #
+      th team1
+      th 预测比分
+      th team2
+      th 比赛时间
+    tbody
+    each item in items
+      tr()
+        td #{item.no}
+        td #{item.team1}
+        td(name="#score1" contentEditable="true") #{item.score1}
+        td  : 
+        td(name="#score2" contentEditable="true") #{item.score2}
+        td #{item.team2}
+        td #{item.showtime}
+        td
+          button(type="submit" onclick="bet(#{item.no})") 投票
+        td
+          div(id="bet#{item.no}")

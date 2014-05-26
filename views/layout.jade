@@ -1,0 +1,20 @@
+doctype html
+html
+  head
+    title World Cup Bet
+    link(rel='stylesheet', href='/css/style.css')
+  body
+    a(href='/') 2014世界杯赛程
+    span /
+    a(href='/board') 竞猜积分榜
+    span /
+    if (user)
+      a(href='/bet/vote') 我的竞猜
+      span / #{user} 
+      a(href='/user/logout') 退出登陆
+    else
+      a(href='/user/login') 登陆
+    block content
+    script(src='/js/jquery-1.10.2.min.js')
+    // script(src='/js/bootstrap.min.js')
+    script(src='/js/2014.js')

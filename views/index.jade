@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  h1 World Cup
+  p Welcome to World Cup
+
+  table
+    thead
+      th #
+      th teamvs
+      th 比赛时间
+    tbody
+    each item in items
+      tr
+        td #{item.no}
+        td #{item.team1}
+        if item.score
+          td #{item.score}
+        else
+          td 尚未开始
+        td #{item.team2}
+        td #{item.showtime}
+        td
+          a(href="match/#{item.no}") 目前竞猜
