@@ -51,6 +51,8 @@ app.get('/board', board.index);
 app.get('/user/login', user.login);
 app.post('/user/login', user.verifyUser);
 app.get('/user/logout', user.logout);
+app.get('/user/reg', user.regView);
+app.post('/user/reg', user.reg);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

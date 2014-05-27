@@ -39,6 +39,20 @@ exports.logout = function(req, res) {
   res.redirect('/');
 };
 
-exports.reg = function(req, res) {
+exports.regView = function(req, res) {
+  res.render('reg');
+};
 
+exports.reg = function(req, res) {
+  var object = {
+    user: req.body.user,
+    showname: req.body.showname || user,
+    password: req.body.password || "password"
+  };
+
+  mongo.addUser(object, function(err, item) {
+    if (err) return res.send("post注册失败");
+    res.send("post注册成功");
+  })
+  // res.render('reg');
 };
