@@ -20,7 +20,7 @@ exports.verifyUser = function(req, res) {
     else if (item != null) {
       if (item.password === password) {
         req.session.user = user;
-        return res.redirect('/');
+        return res.redirect('/bet/vote');
       }
       else {
         result.msg = "登录失败：密码错误";

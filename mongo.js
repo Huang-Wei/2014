@@ -7,7 +7,8 @@ exports.getAllMatches = function(callback) {
   MongoClient.connect(url, function(err, db) {
     if (err)
       return callback(err);
-    db.collection('match').find().toArray(function(err, items) {
+    // 按比赛序号升序排序
+    db.collection('match').find().sort({no:1}).toArray(function(err, items) {
       // console.log("items="+items);
       callback(err, items);
       db.close();

@@ -8,6 +8,7 @@ exports.showVoteResults = function(req, res) {
   }
 
   mongo.getVoteItemsByUser(user, function(err, bet) {
+    // TODO: bet为一个长度为64的数组 or 一个空的数组
     if (err) {
       console.log(err);
       return;
@@ -37,14 +38,15 @@ exports.vote = function(req, res) {
   var score1 = req.body.score1;
   var score2 = req.body.score2;
   var rowno = req.body.rowno;
+  var matchTime = new Date(parseInt(req.body.matchTime));
+  var thisTime = new Date();
 
-  console.log("score1="+score1);
-  console.log("score2="+score2);
+  if (thisTime > matchTime)
+    return res.send("投票时间已过"); // 可能是用户在改系统时间...
 
   mongo.vote(user, score1+":"+score2, rowno, function(err) {
     if (err) {
-      res.send("投票失败");
-      return;
+      return res.send("投票失败");
     }
     res.send("投票成功");
   })
