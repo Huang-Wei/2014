@@ -13,7 +13,7 @@ function bet(matchid) {
     function(data) {
       $("#bet"+matchid).empty().append(data);
   });
-}
+};
 
 $(function() {
   console.log("load() invoked...");
@@ -27,4 +27,4 @@ $(function() {
       $("#score2"+i).attr("contenteditable", false);
     }
   }
-})
+});

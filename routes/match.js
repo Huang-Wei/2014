@@ -12,7 +12,7 @@ exports.showBetItemsByMatch = function(req, res) {
       items: items,
       no: no});
   });
-}
+};
 
 // 用于接收curl命令更新某场比赛比分
 // curl -X POST http://localhost:3000/match -d 'no=1&score=3:0'
@@ -37,4 +37,4 @@ exports.updateScore = function(req, res) {
     result.msg = "更新比分成功";
     res.send(result);
   });
-}
+};

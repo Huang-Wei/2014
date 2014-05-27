@@ -26,7 +26,7 @@ exports.showVoteResults = function(req, res) {
       res.render('bet', {items: items});
     });
   });
-}
+};
 
 exports.vote = function(req, res) {
   var user = req.session.user;
@@ -50,4 +50,4 @@ exports.vote = function(req, res) {
     }
     res.send("投票成功");
   })
-}
+};

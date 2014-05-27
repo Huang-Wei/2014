@@ -2,7 +2,7 @@ var mongo = require('../mongo');
 
 exports.login = function(req, res) {
   res.render('login');
-}
+};
 
 exports.verifyUser = function(req, res) {
   var result = {};
@@ -37,4 +37,8 @@ exports.logout = function(req, res) {
     req.session.destroy(function() {});
   }
   res.redirect('/');
-}
+};
+
+exports.reg = function(req, res) {
+
+};
