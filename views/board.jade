@@ -1,7 +1,10 @@
 extends layout
 
 block content
-  h1 竞猜积分榜：
+  if circleNo
+    h1 圈子#{circleNo}竞猜积分榜
+  else
+    h1 全局竞猜积分榜
 
   table
     thead
@@ -13,7 +16,7 @@ block content
       th 猜错
     tbody
     each item, index in items
-      tr()
+      tr
         td #{index+1}
         td #{item.showname}
         td #{item.win}次

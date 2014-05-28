@@ -6,6 +6,7 @@ var match = require('./routes/match');
 var bet = require('./routes/bet');
 var board = require('./routes/board');
 var user = require('./routes/user');
+var circle = require('./routes/circle');
 
 var app = express();
 
@@ -53,6 +54,8 @@ app.post('/user/login', user.verifyUser);
 app.get('/user/logout', user.logout);
 app.get('/user/reg', user.regView);
 app.post('/user/reg', user.reg);
+app.get('/circle', circle.index);
+app.get('/circle/:no', circle.showBoard);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

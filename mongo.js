@@ -13,10 +13,10 @@ exports.getAllMatches = function(callback) {
       db.close();
     });
   });
-}
+};
 
 // 返回某场比赛竞猜结果
-var getBetItemsByMatch = function(no, callback) {
+exports.getBetItemsByMatch = function getBetItemsByMatch(no, callback) {
   MongoClient.connect(url, function(err, db) {
     if (err) return callback(err);
     db.collection('bet').find({}, {_id:0, user:1, bet: {$slice: [no-1,no]}}).toArray(function(err, items) {
@@ -25,7 +25,7 @@ var getBetItemsByMatch = function(no, callback) {
       db.close();
     });
   });
-}
+};
 
 // 返回某人的所有投票结果
 exports.getVoteItemsByUser = function(user, callback) {
@@ -37,7 +37,7 @@ exports.getVoteItemsByUser = function(user, callback) {
       db.close();
     });
   });
-}
+};
 
 // 更新投票结果
 exports.vote = function(user, score, index, callback) {
@@ -52,7 +52,7 @@ exports.vote = function(user, score, index, callback) {
       db.close();
     });
   });
-}
+};
 
 // 1)更新比赛结果
 // 2)自动计算每人的竞猜得分
@@ -70,7 +70,7 @@ exports.updateMatchScore = function(no, score, callback) {
       // 2)自动计算每人的竞猜得分
       var collection = db.collection('bet');
 
-      getBetItemsByMatch(no, function(err, items) {
+      this.getBetItemsByMatch(no, function(err, items) {
         if (err) return callback(err);
         items.forEach(function(item, index) {
           collection.update({user: item.user}, {$inc: util.getBetResult(score, item.bet[0])}, function(err, item) {
@@ -84,18 +84,18 @@ exports.updateMatchScore = function(no, score, callback) {
       db.close();
     });
   });
-}
+};
 
 // 积分榜
-exports.getBoard = function(callback) {
+exports.getBoard = function(query, callback) {
   MongoClient.connect(url, function(err, db) {
     if (err) return callback(err);
-    db.collection('bet').find({}, {_id:0, bet:0}).toArray(function(err, items) {
+    db.collection('bet').find(query, {_id:0, bet:0}).toArray(function(err, items) {
       callback(err, items);
       db.close();
     });
   });
-}
+};
 
 // 登录
 exports.getUserByName = function(user, password, callback) {
@@ -107,7 +107,7 @@ exports.getUserByName = function(user, password, callback) {
       db.close();
     });
   });
-}
+};
 
 // 注册
 exports.addUser = function(user, callback) {
@@ -132,6 +132,33 @@ exports.addUser = function(user, callback) {
       });
     });
   });
-}
+};
 
-exports.getBetItemsByMatch = getBetItemsByMatch;
+// 我的圈子：当前用户的圈子 > 所有圈子的信息
+exports.getMyCircles = function(user, callback) {
+  MongoClient.connect(url, function(err, db) {
+    if (err) return callback(err);
+    db.collection('user').find({user: user}, {circle: 1}).nextObject(function(err, item) {
+      if (err) {
+        db.close();
+        return callback(err);
+      }
+      console.log("User Circle item="+item);
+      
+      db.collection('circle').find({no: {$in: item.circle}}).toArray(function(err, items) {
+        callback(err, items);
+        db.close();
+      })
+    });
+  });
+};
+
+exports.getUsersByCircle = function(no, callback) {
+  MongoClient.connect(url, function(err, db) {
+    if (err) return callback(err);
+    db.collection('user').find({circle: no}, {user: 1}).toArray(function(err, users) {
+      callback(err, users);
+      db.close();
+    });
+  });
+};

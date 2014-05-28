@@ -20,8 +20,14 @@ exports.showVoteResults = function(req, res) {
       }
       items.forEach(function(item, index) {
         var score = bet.bet[index];
-        item["score1"] = score.split(":")[0];
-        item["score2"] = score.split(":")[1];
+        if (score == null) {
+          item["score1"] = "N/A";
+          item["score2"] = "N/A";
+        }
+        else {
+          item["score1"] = score.split(":")[0];
+          item["score2"] = score.split(":")[1];
+        }
       });
       res.render('bet', {items: items});
     });
