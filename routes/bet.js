@@ -48,12 +48,12 @@ exports.vote = function(req, res) {
   var thisTime = new Date();
 
   if (thisTime > matchTime)
-    return res.send("投票时间已过"); // 可能是用户在改系统时间...
+    return res.send("alert-danger,投票时间已过"); // 可能是用户在改系统时间...
 
   mongo.vote(user, score1+":"+score2, rowno, function(err) {
     if (err) {
-      return res.send("投票失败");
+      return res.send("alert-danger,投票失败");
     }
-    res.send("投票成功");
+    res.send("alert-success,投票成功");
   })
 };

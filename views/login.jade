@@ -1,11 +1,18 @@
 extends layout
 
 block content
-  h1 登录
+  .page-header
+    h2 登录
 
-  form(action="/user/login" method="post")
-    span 用户名：
-    input(type="text", name="user")
-    span 密码：
-    input(type="password", name="password")
-    button(type='submit') 登录
+  form.form-horizontal(action="/user/login" method="post")
+    .form-group
+      label.col-sm-2.control-label 用户名
+      .col-sm-3
+        input.form-control(type="text", name="user")
+    .form-group
+      label.col-sm-2.control-label 密码
+      .col-sm-3
+        input.form-control(type="password", name="password")
+    .form-group
+      .col-sm-offset-2.col-sm-3
+        button.btn.btn-default(type='submit') 登录

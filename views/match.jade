@@ -1,9 +1,10 @@
 extends layout
 
 block content
-  h1 本场比赛#{no} 目前竞猜结果：
+  .page-header
+    h2 本场比赛#{no} 目前竞猜结果：
 
-  table
+  table.table.table-hover
     thead
       th 竞猜者
       th 比分

@@ -1,12 +1,13 @@
 extends layout
 
 block content
-  if circleNo
-    h1 圈子#{circleNo}竞猜积分榜
-  else
-    h1 全局竞猜积分榜
+  .page-header
+    if circleNo
+      h2 圈子#{circleNo}竞猜积分榜
+    else
+      h2 全局竞猜积分榜
 
-  table
+  table.table.table-hover
     thead
       th 排名
       th 竞猜者

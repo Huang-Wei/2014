@@ -11,7 +11,12 @@ function bet(matchid) {
     rowno: rowno,
     matchTime: matchTime},
     function(data) {
-      $("#bet"+matchid).empty().append(data);
+      // $("#bet"+matchid).empty().append(data);
+      // $("#info").empty().append(data);
+      $("#popup").addClass(data.split(",")[0]);
+      $("#popup").show();
+      $("#popup-msg").empty().append(data.split(",")[1]);
+      $("#popup").fadeOut(5000);
   });
 };
 

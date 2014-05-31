@@ -1,22 +1,52 @@
 doctype html
 html
   head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
     title World Cup Bet
-    link(rel='stylesheet', href='/css/style.css')
+    link(href='/css/bootstrap.min.css', rel='stylesheet')
+    link(href='/css/2014.css', rel='stylesheet')
   body
-    a(href='/') 2014世界杯赛程
-    span /
-    a(href='/board') 竞猜积分榜
-    span /
-    if (user)
-      a(href='/circle') 我的圈子
-      span /
-      a(href='/bet/vote') 我的竞猜
-      span / #{user} 
-      a(href='/user/logout') 注销
-    else
-      a(href='/user/login') 登陆
-    
-    script(src='/js/jquery-1.10.2.min.js')
+    #wrap
+      .navbar.navbar-default.navbar-fixed-top
+        #popup.alert.alert-dismissable
+          button.close(type="button" data-dismiss="alert" aria-hidden="true") &times;
+          #popup-msg This is a popup msg.
+        .container
+          .navbar-header
+            button.navbar-toggle(type='button' data-toggle='collapse' data-target='.navbar-collapse')
+              //span.sr-only Toggle navigation
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
+            a.navbar-brand(href='#') 2014巴西世界杯
+          .collapse.navbar-collapse
+            ul.nav.navbar-nav
+              li
+                a(href='/') 赛程
+              li
+                a(href='/board') 竞猜积分榜
+              if (user)
+                li
+                  a(href='/circle') 我的圈子
+                li
+                  a(href='/bet/vote') 我的竞猜
+          
+            ul.nav.navbar-nav.navbar-right
+              if (user)
+                li
+                  a.disabled #{user}
+                li
+                  a(href='/user/logout') 注销
+              else
+                li
+                  a(href='/user/login') 登陆
 
-    block content
+      script(src='/js/jquery-1.10.2.min.js')
+      script(src='/js/bootstrap.min.js')
+      .container
+        block content
+    #footer
+      .container
+        p.text-muted 2014 CopyLeft by hweicdl

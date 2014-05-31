@@ -1,13 +1,15 @@
 extends layout
 
 block content
-  h1 World Cup
-  p Welcome to World Cup
+  .page-header
+    h2 世界杯
 
-  table
+  table.table.table-hover
     thead
       th #
-      th teamvs
+      th 
+      th 比分
+      th
       th 比赛时间
     tbody
     each item in items
