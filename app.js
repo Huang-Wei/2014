@@ -55,7 +55,12 @@ app.get('/user/logout', user.logout);
 app.get('/user/reg', user.regView);
 app.post('/user/reg', user.reg);
 app.get('/circle', circle.index);
-app.get('/circle/:no', circle.showBoard);
+app.get('/circle/create', circle.createView);
+app.post('/circle/create', circle.create);
+app.get('/circle/join/:circleName', circle.join);
+app.get('/circle/quit/:circleName', circle.quit);
+app.get('/circle/discard/:circleName', circle.discard);
+app.get('/circle/:circleName', circle.showBoard);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

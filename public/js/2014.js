@@ -20,6 +20,16 @@ function bet(matchid) {
   });
 };
 
+function getFocus(id) {
+  // console.log('inputFocus() invoked...');
+  $("#"+id).addClass('focus');
+};
+
+function lostFocus(id) {
+  // console.log('inputFocus() invoked...');
+  $("#"+id).removeClass('focus');
+};
+
 $(function() {
   console.log("load() invoked...");
   var rowCount = $("#myTable tr").length;

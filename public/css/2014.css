@@ -30,6 +30,7 @@ body {
 }
 .container .text-muted {
   margin: 20px 0;
+  text-align: right
 }
 
 #footer > .container {
@@ -47,4 +48,8 @@ code {
   z-index: 1;
   width: 100%;
   display: none
+}
+
+.focus {
+  background-color: #f8f50f !important
 }

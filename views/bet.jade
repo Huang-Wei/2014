@@ -8,7 +8,7 @@ block content
     thead
       th #
       th team1
-      th 预测比分
+      th(colspan=3) 预测比分
       th team2
       th 比赛时间
     tbody
@@ -16,14 +16,18 @@ block content
         tr
           td #{item.no}
           td #{item.team1}
-          td(id="score1#{item.no}" contentEditable="true") #{item.score1}
+          td(id="score1#{item.no}" contentEditable="true" 
+            onfocus="getFocus('score1#{item.no}')"
+            onblur="lostFocus('score1#{item.no}')") #{item.score1}
           td  : 
-          td(id="score2#{item.no}" contentEditable="true") #{item.score2}
+          td(id="score2#{item.no}" contentEditable="true" 
+            onfocus="getFocus('score2#{item.no}')"
+            onblur="lostFocus('score2#{item.no}')") #{item.score2}
           td #{item.team2}
           td
             div(id="time#{item.no}" value="#{item.time.valueOf()}") #{item.showtime}
           td
-            button(id="btn#{item.no}" type="submit" onclick="bet(#{item.no})") 提交比分
+            button.btn.btn-default(id="btn#{item.no}" type="submit" onclick="bet(#{item.no})") 提交比分
           td
             div(id="bet#{item.no}")
 

@@ -2,29 +2,34 @@ extends layout
 
 block content
   .page-header
-    if circleNo
-      h2 圈子#{circleNo}竞猜积分榜
+    if circleName
+      .pull-right
+        if enableJoin
+          a.btn.btn-primary(href="/circle/join/#{circleName}") 加入圈子
+      h2 圈子 #{circleName} 竞猜积分榜
     else
       h2 全局竞猜积分榜
+
 
   table.table.table-hover
     thead
       th 排名
       th 竞猜者
-      th 猜中比分
-      th 猜中结果
+      th 猜中比分场次
+      th 猜中胜负平场次
       th 总得分
-      th 猜错
+      //th 猜错
     tbody
     each item, index in items
       tr
         td #{index+1}
         td #{item.showname}
-        td #{item.win}次
-        td #{item.draw}次
-        td #{item.betscore}
-        if item.lose
-          td #{item.lose}次
-        else
-          td 0
+        td #{item.win}
+        td #{item.draw}
+        td
+          span.badge #{item.betscore}
+        //if item.lose
+          //td #{item.lose}
+        //else
+          //td 0
         

@@ -1,0 +1,27 @@
+extends ../layout
+
+block content
+  .page-header
+    .pull-right
+      a.btn.btn-primary(href="/circle/join/#{circleName}") 创建圈子
+    h2 我的竞猜圈子
+
+  table.table.table-hover
+    thead
+      th name
+      th owner
+      th desc
+      th operation
+    tbody
+    each item in items
+      tr
+        td
+          a(href="/circle/#{item.name}") #{item.name}
+        td #{item.owner}
+        td #{item.desc}
+        if item.owner === user
+          td
+            a(href="/circle/discard/#{item.name}") 解散圈子
+        else
+          td
+            a(href="/circle/quit/#{item.name}") 退出圈子

@@ -1,0 +1,18 @@
+extends ../layout
+
+block content
+  .page-header
+    h2 创建圈子
+
+  form.form-horizontal(action="/circle/create" method="post")
+    .form-group
+      label.col-sm-2.control-label 圈子名称
+      .col-sm-3
+        input.form-control(type="text", name="name")
+    .form-group
+      label.col-sm-2.control-label 圈子描述
+      .col-sm-5
+        textarea.form-control(rows="3" name="desc")
+    .form-group
+      .col-sm-offset-2.col-sm-3
+        button.btn.btn-default(type='submit') 提交

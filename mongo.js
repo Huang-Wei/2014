@@ -145,7 +145,7 @@ exports.getMyCircles = function(user, callback) {
       }
       console.log("User Circle item="+item);
       
-      db.collection('circle').find({no: {$in: item.circle}}).toArray(function(err, items) {
+      db.collection('circle').find({name: {$in: item.circle}}).toArray(function(err, items) {
         callback(err, items);
         db.close();
       })
@@ -153,12 +153,84 @@ exports.getMyCircles = function(user, callback) {
   });
 };
 
-exports.getUsersByCircle = function(no, callback) {
+// 圈子的所有用户
+exports.getUsersByCircle = function(name, callback) {
   MongoClient.connect(url, function(err, db) {
     if (err) return callback(err);
-    db.collection('user').find({circle: no}, {user: 1}).toArray(function(err, users) {
+    db.collection('user').find({circle: name}, {user: 1}).toArray(function(err, users) {
       callback(err, users);
       db.close();
+    });
+  });
+};
+
+// 创建圈子by name
+exports.createCircleByName = function(circle, callback) {
+  MongoClient.connect(url, function(err, db) {
+    if (err) return callback(err);
+    db.collection('circle').insert(circle, function(err, item) {
+      if (err) {
+        db.close();
+        return callback(err);
+      }
+
+      // 在user表中加入创建者信息
+      var update = {
+        $push: {
+          circle: circle.name,
+          circleAdmin: circle.name
+        }
+      };
+      db.collection('user').update({user: circle.owner}, update, function(err, item) {
+        console.log("user circle item = " + item);
+        callback(err, item);
+        db.close();
+      });
+    });
+  });
+};
+
+// 用户加入circle
+exports.joinCircle = function(user, circleName, callback) {
+  MongoClient.connect(url, function(err, db) {
+    if (err) return callback(err);
+    db.collection('user').update({user: user}, {$push: {circle: circleName}}, function(err, item) {
+      callback(err, item);
+      db.close();
+    });
+  });
+};
+
+// 用户退出circle
+exports.quitCircle = function(user, circleName, callback) {
+  MongoClient.connect(url, function(err, db) {
+    if (err) return callback(err);
+    db.collection('user').update({user: user}, {$pull: {circle: circleName}}, function(err, item) {
+      callback(err, item);
+      db.close();
+    });
+  });
+};
+
+// 解散circle
+exports.discardCircle = function(user, circleName, callback) {
+  MongoClient.connect(url, function(err, db) {
+    if (err) return callback(err);
+    db.collection('circle').remove({owner:user, name:circleName}, function(err, item) {
+      if (err || item == 0) { // 只有圈子的owner才能删除此圈子
+        db.close();
+        return callback(err, item);
+      }
+
+      // 删除 user 表中的信息
+      var collection = db.collection('user');
+      collection.update({}, {$pull: {circle: circleName}}, {w:1, multi:true}, function(err, items) {
+        // callback(err, items);
+        collection.update({user:user}, {$pull: {circleAdmin: circleName}}, function(err, items) {
+          callback(err, items);
+          db.close();
+        });
+      });
     });
   });
 };
