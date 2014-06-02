@@ -16,7 +16,7 @@ exports.getAllMatches = function(callback) {
 };
 
 // 返回某场比赛竞猜结果
-exports.getBetItemsByMatch = function getBetItemsByMatch(no, callback) {
+function getBetItemsByMatch(no, callback) {
   MongoClient.connect(url, function(err, db) {
     if (err) return callback(err);
     db.collection('bet').find({}, {_id:0, user:1, bet: {$slice: [no-1,no]}}).toArray(function(err, items) {
@@ -70,18 +70,27 @@ exports.updateMatchScore = function(no, score, callback) {
       // 2)自动计算每人的竞猜得分
       var collection = db.collection('bet');
 
-      this.getBetItemsByMatch(no, function(err, items) {
+      getBetItemsByMatch(no, function(err, items) {
         if (err) return callback(err);
-        items.forEach(function(item, index) {
-          collection.update({user: item.user}, {$inc: util.getBetResult(score, item.bet[0])}, function(err, item) {
-            console.log("计算每人竞猜得分："+item);
-            if (err) callback(err);
+        var cbCheck = 0;
+        (function() {
+          items.forEach(function(item, index) {
+            cbCheck++;
+            collection.update({user: item.user}, {$inc: util.getBetResult(score, item.bet[0])}, function(err, item) {
+              console.log("计算每人竞猜得分："+item);
+              if (err) callback(err);
+              if (cbCheck == items.length) {
+                callback("全部计算完毕");
+                db.close();
+              }
+            });
           });
-        });
+        })();
+        
       });
 
-      callback(null);
-      db.close();
+      // callback("提前退出");
+      // db.close();
     });
   });
 };
@@ -90,10 +99,20 @@ exports.updateMatchScore = function(no, score, callback) {
 exports.getBoard = function(query, callback) {
   MongoClient.connect(url, function(err, db) {
     if (err) return callback(err);
-    db.collection('bet').find(query, {_id:0, bet:0}).toArray(function(err, items) {
-      callback(err, items);
-      db.close();
-    });
+    // top 10
+    if (query == null) {
+      db.collection('bet').find({}, {_id:0, bet:0}).sort({betscore:-1}).limit(10).toArray(function(err, items) {
+        callback(err, items);
+        db.close();
+      });
+    }
+    // 圈子积分榜
+    else {
+      db.collection('bet').find(query, {_id:0, bet:0}).sort({betscore:-1}).toArray(function(err, items) {
+        callback(err, items);
+        db.close();
+      });
+    }
   });
 };
 
@@ -192,6 +211,7 @@ exports.createCircleByName = function(circle, callback) {
 
 // 用户加入circle
 exports.joinCircle = function(user, circleName, callback) {
+  // TODO: 用户最多只能加入5个圈子?
   MongoClient.connect(url, function(err, db) {
     if (err) return callback(err);
     db.collection('user').update({user: user}, {$push: {circle: circleName}}, function(err, item) {
@@ -234,3 +254,14 @@ exports.discardCircle = function(user, circleName, callback) {
     });
   });
 };
+
+exports.getCirclesByUser = function(user, callback) {
+  MongoClient.connect(url, function(err, db) {
+    db.collection('user').find({user: user}, {circle:1}).nextObject(function(err, item) {
+      callback(err, item);
+      db.close();
+    });
+  });
+};
+
+exports.getBetItemsByMatch = getBetItemsByMatch;

@@ -46,7 +46,7 @@ exports.regView = function(req, res) {
 exports.reg = function(req, res) {
   var object = {
     user: req.body.user,
-    showname: req.body.showname || user,
+    showname: req.body.showname || req.body.user,
     password: req.body.password || "password"
   };
 

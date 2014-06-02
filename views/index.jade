@@ -2,25 +2,25 @@ extends layout
 
 block content
   .page-header
-    h2 世界杯
+    h2 世界杯赛程
 
-  table.table.table-hover
-    thead
-      th #
-      th 
-      th 比分
-      th
-      th 比赛时间
+  table.table.table-hover.table-condensed
     tbody
     each item in items
       tr
-        td #{item.no}
-        td #{item.team1}
-        if item.score
-          td #{item.score}
-        else
-          td 尚未开始
-        td #{item.team2}
-        td #{item.showtime}
+        td #{item.showDate}
+        td #{item.showTime}
+        td(align="center")
+          img.flag.img-thumbnail(src='/images/wc2014/#{item.flag1}.png') 
+        td(align="center") #{item.team1} 
+        td(align="center") #{item.score1}
+        td(align="center") :
+        td(align="center") #{item.score2}
+        td(align="center") #{item.team2}
+        td(align="center")
+          img.flag.img-thumbnail(src='/images/wc2014/#{item.flag2}.png') 
+        td #{item.stage}
+        td #{item.group}
         td
-          a(href="match/#{item.no}") 目前竞猜
+          a.btn.btn-info(href="match/#{item.no}") 目前竞猜
+        td [#{item.no}]

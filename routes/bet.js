@@ -1,4 +1,5 @@
 var mongo = require('../mongo');
+var util = require('../util');
 
 exports.showVoteResults = function(req, res) {
   var user = req.session.user;
@@ -19,6 +20,10 @@ exports.showVoteResults = function(req, res) {
         return;
       }
       items.forEach(function(item, index) {
+        var time = util.getLocalTime(item.time, 8);
+        item.showDate = time[0];
+        item.showTime = time[1];
+        
         var score = bet.bet[index];
         if (score == null) {
           item["score1"] = "N/A";
@@ -48,12 +53,12 @@ exports.vote = function(req, res) {
   var thisTime = new Date();
 
   if (thisTime > matchTime)
-    return res.send("alert-danger,投票时间已过"); // 可能是用户在改系统时间...
+    return res.send("alert-danger,竞猜时间已过"); // 可能是用户在改系统时间...
 
   mongo.vote(user, score1+":"+score2, rowno, function(err) {
     if (err) {
-      return res.send("alert-danger,投票失败");
+      return res.send("alert-danger,竞猜比分失败");
     }
-    res.send("alert-success,投票成功");
+    res.send("alert-success,竞猜比分成功");
   })
 };

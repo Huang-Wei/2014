@@ -8,7 +8,7 @@ block content
           a.btn.btn-primary(href="/circle/join/#{circleName}") 加入圈子
       h2 圈子 #{circleName} 竞猜积分榜
     else
-      h2 全局竞猜积分榜
+      h2 竞猜总积分榜Top10
 
 
   table.table.table-hover
@@ -17,17 +17,37 @@ block content
       th 竞猜者
       th 猜中比分场次
       th 猜中胜负平场次
-      th 总得分
+      th
+        abbr(title='猜中比分场次*3+猜中胜负平场次*1') 总得分
+      if circleName == null
+        th
+          abbr(title='TA属于哪些圈子，可以选择加入其中') TA的圈子
       //th 猜错
     tbody
     each item, index in items
       tr
         td #{index+1}
         td #{item.showname}
-        td #{item.win}
-        td #{item.draw}
         td
-          span.badge #{item.betscore}
+          if item.win
+            | #{item.win}
+          else
+            | 0
+        td
+          if item.draw
+            | #{item.draw}
+          else
+            | 0
+        td
+          if item.betscore
+            span.badge #{item.betscore}
+          else
+            span.badge 0
+        td
+          if item.circle !== undefined
+            each circle in item.circle
+              a(href="/circle/#{circle}") #{circle}
+              | 
         //if item.lose
           //td #{item.lose}
         //else

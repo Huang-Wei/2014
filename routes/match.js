@@ -23,6 +23,7 @@ exports.updateScore = function(req, res) {
   var score = req.body.score;
 
   mongo.updateMatchScore(no, score, function(err, updateno) {
+    console.log(err);
     var result = {}
     if (err) {
       result.msg = err;

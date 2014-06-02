@@ -2,33 +2,32 @@ extends layout
 
 block content
   .page-header
-    h2 我的竞猜结果：
+    h2 我的竞猜
 
-  table.table.table-hover(id="myTable")
-    thead
-      th #
-      th team1
-      th(colspan=3) 预测比分
-      th team2
-      th 比赛时间
+  table.table.table-hover.table-condensed(id="myTable")
     tbody
       each item in items
         tr
-          td #{item.no}
-          td #{item.team1}
-          td(id="score1#{item.no}" contentEditable="true" 
+          td #{item.showDate}
+          td
+            div(id="time#{item.no}" value="#{item.time.valueOf()}") #{item.showTime}
+          td(align="center")
+            img.flag.img-thumbnail(src='/images/wc2014/#{item.flag1}.png') 
+          td(align="center") #{item.team1}
+          td(align="center" id="score1#{item.no}" contentEditable="true" 
             onfocus="getFocus('score1#{item.no}')"
             onblur="lostFocus('score1#{item.no}')") #{item.score1}
-          td  : 
-          td(id="score2#{item.no}" contentEditable="true" 
+          td(align="center") :
+          td(align="center" id="score2#{item.no}" contentEditable="true" 
             onfocus="getFocus('score2#{item.no}')"
             onblur="lostFocus('score2#{item.no}')") #{item.score2}
-          td #{item.team2}
+          td(align="center") #{item.team2}
+          td(align="center")
+            img.flag.img-thumbnail(src='/images/wc2014/#{item.flag2}.png') 
+          td #{item.stage}
+          td #{item.group}
           td
-            div(id="time#{item.no}" value="#{item.time.valueOf()}") #{item.showtime}
-          td
-            button.btn.btn-default(id="btn#{item.no}" type="submit" onclick="bet(#{item.no})") 提交比分
-          td
-            div(id="bet#{item.no}")
+            button.btn.btn-primary(id="btn#{item.no}" type="submit" onclick="bet(#{item.no})") 提交比分
+          td ##{item.no}
 
-  script(src='/js/2014.js')
+  script(src='/js/bet.js')

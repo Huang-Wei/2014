@@ -1,6 +1,12 @@
 exports.getBetResult = function(score, betscore) {
   var result = {};
 
+  // 用户未投票，还是null状态
+  if (betscore == null) {
+    result.lose = 1;
+    return result;
+  }
+
   var s1 = score.split(":")[0];
   var s2 = score.split(":")[1];
   var bs1 = betscore.split(":")[0];
@@ -43,4 +49,18 @@ exports.getBetResult = function(score, betscore) {
     result.lose = 1;
   }
   return result;
-}
+};
+
+exports.getLocalTime = function(time, offset) {
+  var retValue = [];
+  var utc = time.getTime() + (time.getTimezoneOffset() * 60000);
+  var nd = new Date(utc + (3600000*offset));
+  
+  retValue[0] = printT(nd.getMonth()+1)+"月"+printT(nd.getDate())+"日";
+  retValue[1] = printT(nd.getHours())+":"+printT(nd.getMinutes());
+  return retValue;
+};
+
+function printT(time) {
+  return time.toString().length == 1 ? "0"+time : time;
+};
