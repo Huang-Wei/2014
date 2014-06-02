@@ -8,7 +8,10 @@ block content
     tbody
     each item in items
       tr
-        td #{item.showDate}
+        if item.hideDate
+          td 
+        else
+          td #{item.showDate}
         td #{item.showTime}
         td(align="center")
           img.flag.img-thumbnail(src='/images/wc2014/#{item.flag1}.png') 

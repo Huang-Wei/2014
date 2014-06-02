@@ -19,11 +19,22 @@ exports.showVoteResults = function(req, res) {
         console.log(err);
         return;
       }
+
+      var lastDate = null;
       items.forEach(function(item, index) {
+        // pretty time
         var time = util.getLocalTime(item.time, 8);
         item.showDate = time[0];
         item.showTime = time[1];
+
+        if (lastDate != time[0]) {
+          lastDate = time[0];
+        }
+        else {
+          item.hideDate = true;
+        }
         
+        // pretty score
         var score = bet.bet[index];
         if (score == null) {
           item["score1"] = "N/A";

@@ -51,12 +51,14 @@ exports.getBetResult = function(score, betscore) {
   return result;
 };
 
+var weekday = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+
 exports.getLocalTime = function(time, offset) {
   var retValue = [];
   var utc = time.getTime() + (time.getTimezoneOffset() * 60000);
   var nd = new Date(utc + (3600000*offset));
   
-  retValue[0] = printT(nd.getMonth()+1)+"月"+printT(nd.getDate())+"日";
+  retValue[0] = printT(nd.getMonth()+1)+"月"+printT(nd.getDate())+"日 "+weekday[nd.getDay()];
   retValue[1] = printT(nd.getHours())+":"+printT(nd.getMinutes());
   return retValue;
 };
