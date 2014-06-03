@@ -44,6 +44,7 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
+app.get('/calendar', match.showCalendar);
 app.post('/match', match.updateScore); // admin use
 app.get('/match/:no', match.showBetItemsByMatch);
 app.get('/bet/vote', bet.showVoteResults);

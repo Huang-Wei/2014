@@ -1,31 +1,17 @@
 extends layout
 
 block content
-  .page-header
-    h2 世界杯赛程
-
-  table.table.table-hover.table-condensed
-    tbody
-    each item in items
-      tr
-        if item.hideDate
-          td 
-        else
-          td(align="right") #{item.showDate}
-        td #{item.showTime}
-        td(align="center")
-          img.flag.img-thumbnail(src='/images/wc2014/#{item.flag1}.png') 
-        td(align="center") #{item.team1} 
-        td 
-          .score(align="center") #{item.score1} 
-        td(align="center") :
-        td
-          .score(align="center") #{item.score2} 
-        td(align="center") #{item.team2}
-        td(align="center")
-          img.flag.img-thumbnail(src='/images/wc2014/#{item.flag2}.png') 
-        td #{item.stage}
-        td #{item.group}
-        td
-          a.btn.btn-info(href="match/#{item.no}") 目前竞猜
-        td [#{item.no}]
+  .jumbotron
+    h1 你，我的世界杯竞猜之旅
+    hr 
+    p 它什么也没有，除了世界杯的竞猜功能；
+    p 它什么也没有，除了分享世界杯的参与感；
+    p 它什么也没有，除了提供一个球迷们众乐乐的平台。
+    hr
+    p 这个夏天，时区：
+      code UTC-3
+      | ，你准备好了吗？
+    p(align="right")
+      a.btn.btn-lg.btn-success(href='#') 注册
+      |    
+      a.btn.btn-lg.btn-info(href='#') 竞猜规则
