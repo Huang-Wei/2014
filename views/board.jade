@@ -46,7 +46,7 @@ block content
         td
           if item.circle !== undefined
             each circle in item.circle
-              a(href="/circle/#{circle}") #{circle}
+              a.btn.btn-warning(href="/circle/#{circle}") #{circle}
               | 
         //if item.lose
           //td #{item.lose}
