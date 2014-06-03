@@ -3,7 +3,7 @@ function popupMsg(css, msg, matchid) {
   $("#popup").empty().append(msg);
   $("#popup").show();
   $("#popup").delay(2500).fadeOut(1000, function() {
-    console.log("callback fadeout");
+    // console.log("callback fadeout");
     $("#btn"+matchid).removeAttr('disabled');
     $("#popup").removeClass(css);
   });
@@ -28,10 +28,10 @@ function bet(matchid) {
       rowno: rowno,
       matchTime: matchTime},
       function(data) {
-        var css = data.split(",")[0];
-        var msg = data.split(",")[1];
+        var css = data.css;
+        var msg = data.msg;
         popupMsg(css, msg, matchid);
-    });    
+    });
   }
 };
 

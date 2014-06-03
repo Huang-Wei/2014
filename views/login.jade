@@ -4,15 +4,22 @@ block content
   .page-header
     h2 登录
 
-  form.form-horizontal(action="/user/login" method="post")
-    .form-group
-      label.col-sm-2.control-label 用户名
-      .col-sm-3
-        input.form-control(type="text", name="user")
-    .form-group
-      label.col-sm-2.control-label 密码
-      .col-sm-3
-        input.form-control(type="password", name="password")
-    .form-group
-      .col-sm-offset-2.col-sm-3
-        button.btn.btn-default(type='submit') 登录
+  if user
+    .well #{user}已登录。若以其他用户登陆，请先
+      a(href='/user/logout') 注销
+      | 当前用户。
+  else
+    form.form-horizontal
+      .form-group
+        label.col-sm-2.control-label 用户名
+        .col-sm-3
+          input.form-control(id="user" type="text" name="user")
+      .form-group
+        label.col-sm-2.control-label 密码
+        .col-sm-3
+          input.form-control(id="password" type="password" name="password")
+      .form-group
+        .col-sm-offset-2.col-sm-3
+          a.btn.btn-primary(onclick='login()') 登录
+
+  script(src='/js/2014.js')

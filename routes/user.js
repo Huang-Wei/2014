@@ -7,7 +7,8 @@ exports.login = function(req, res) {
 exports.verifyUser = function(req, res) {
   var result = {};
   if (req.session.user) {
-    result.msg = req.session.user+"已登录";
+    result.css = 'alert-warning';
+    result.msg = req.session.user+"已登录。若以其他用户登陆，请先注销当前用户。";
     return res.send(result);
   }
 
@@ -15,17 +16,23 @@ exports.verifyUser = function(req, res) {
   var password = req.body.password;
 
   mongo.getUserByName(user, password, function(err, item) {
-    if (err || item == null)
-      result.msg = "登录失败：无此用户";
+    if (err || item == null) {
+      result.css = 'alert-danger';
+      result.msg = '登录失败：无此用户';
+    }
     else if (item != null) {
       if (item.password === password) {
         req.session.user = user;
-        return res.redirect('/bet/vote');
+        result.css = 'alert-success';
+        result.msg = '登录成功';
+        // return res.redirect('/bet/vote');
       }
       else {
-        result.msg = "登录失败：密码错误";
+        result.css = 'alert-danger';
+        result.msg = '登录失败：密码错误';
       }
     }
+    console.log(result);
     res.send(result);
   });
 };

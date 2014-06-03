@@ -51,10 +51,14 @@ exports.showVoteResults = function(req, res) {
 };
 
 exports.vote = function(req, res) {
+  var result = {};
+
   var user = req.session.user;
   if (user == null || user === '') {
-    res.send("用户未登陆");
-    return res.redirect('/user/login');
+    result.msg = 'alert-warning';
+    result.msg = '用户未登陆';
+    return res.send(result);
+    // return res.redirect('/user/login'); // ？？？
   }
 
   var score1 = req.body.score1;
@@ -63,13 +67,20 @@ exports.vote = function(req, res) {
   var matchTime = new Date(parseInt(req.body.matchTime));
   var thisTime = new Date();
 
-  if (thisTime > matchTime)
-    return res.send("alert-danger,竞猜时间已过"); // 可能是用户在改系统时间...
+  if (thisTime > matchTime) {
+    result.msg = '亲，竞猜时间已过。改系统时间什么的就不太好了吧：）';
+    result.css = 'alert-warning';
+    return res.send(result); // 可能是用户在改系统时间...
+  }
 
   mongo.vote(user, score1+":"+score2, rowno, function(err) {
     if (err) {
-      return res.send("alert-danger,竞猜比分失败");
+      result.msg = '竞猜比分失败:' + err;
+      result.css = 'alert-danger';
+      return res.send(result);
     }
-    res.send("alert-success,竞猜比分成功");
+    result.msg = '竞猜比分成功';
+    result.css = 'alert-success';
+    res.send(result);
   })
 };
