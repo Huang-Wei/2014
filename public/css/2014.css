@@ -51,7 +51,13 @@ code {
 }
 
 .focus {
-  background-color: #f8f50f !important
+  /*border: 2px solid;*/
+  background-color: #FFFF00 !important
+}
+
+.score {
+  border: 1px solid #ddd;
+  border-radius: 6px;
 }
 
 .flag {

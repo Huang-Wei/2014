@@ -11,14 +11,16 @@ block content
         if item.hideDate
           td 
         else
-          td #{item.showDate}
+          td(align="right") #{item.showDate}
         td #{item.showTime}
         td(align="center")
           img.flag.img-thumbnail(src='/images/wc2014/#{item.flag1}.png') 
         td(align="center") #{item.team1} 
-        td(align="center") #{item.score1}
+        td 
+          .score(align="center") #{item.score1} 
         td(align="center") :
-        td(align="center") #{item.score2}
+        td
+          .score(align="center") #{item.score2} 
         td(align="center") #{item.team2}
         td(align="center")
           img.flag.img-thumbnail(src='/images/wc2014/#{item.flag2}.png') 
