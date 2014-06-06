@@ -649,3 +649,8 @@ db.match.insert(
   "time":new Date(Date.UTC(2014,5,26,20,00)),
   "stage":"小组赛"}
 );
+
+db.user.ensureIndex({"user":1},{"unique":true})
+db.circle.ensureIndex({"name":1},{"unique":true})
+db.bet.ensureIndex({"betscore":-1})
+db.bet.ensureIndex({"user":1})

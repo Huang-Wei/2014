@@ -57,13 +57,11 @@ code {
 }
 
 .score {
+  display: block;
   border: 1px solid #ddd;
   border-radius: 6px;
-}
-
-.flag {
-  width: 36px;
-  height: 26px
+  width: 50px;
+  text-align: center;
 }
 
 .table > thead > tr > th,
@@ -86,4 +84,139 @@ code {
 
 .jumbotron {
   background-color: white !important;
+}
+
+.flag {
+  width: 34px; /*35px*/
+  height: 22px; /*23px*/
+  border-radius: 4px;
+  /*border: 1px solid #dddddd;*/
+}
+
+.flag-bra {
+  background: url('../images/flag_all.png') no-repeat 0px 0px;
+}
+
+.flag-cro {
+  background: url('../images/flag_all.png') no-repeat -36px 0px;
+}
+
+.flag-mex {
+  background: url('../images/flag_all.png') no-repeat -71px 0px;
+}
+
+.flag-cmr {
+  background: url('../images/flag_all.png') no-repeat -106px 0px;
+}
+
+.flag-esp {
+  background: url('../images/flag_all.png') no-repeat 0px -24px;
+}
+
+.flag-ned {
+  background: url('../images/flag_all.png') no-repeat -35px -24px;
+}
+
+.flag-chi {
+  background: url('../images/flag_all.png') no-repeat -70px -24px;
+}
+
+.flag-aus {
+  background: url('../images/flag_all.png') no-repeat -105px -23px;
+}
+
+.flag-col {
+  background: url('../images/flag_all.png') no-repeat 0px -47px;
+}
+
+.flag-gre {
+  background: url('../images/flag_all.png') no-repeat -36px -47px;
+}
+
+.flag-civ {
+  background: url('../images/flag_all.png') no-repeat -71px -47px;
+}
+
+.flag-jpn {
+  background: url('../images/flag_all.png') no-repeat -106px -47px;
+}
+
+.flag-uru {
+  background: url('../images/flag_all.png') no-repeat 0px -70px;
+}
+
+.flag-crc {
+  background: url('../images/flag_all.png') no-repeat -36px -70px;
+}
+
+.flag-eng {
+  background: url('../images/flag_all.png') no-repeat -71px -70px;
+}
+
+.flag-ita {
+  background: url('../images/flag_all.png') no-repeat -106px -70px;
+}
+
+.flag-sui {
+  background: url('../images/flag_all.png') no-repeat 0px -93px;
+}
+
+.flag-ecu {
+  background: url('../images/flag_all.png') no-repeat -36px -93px;
+}
+
+.flag-fra {
+  background: url('../images/flag_all.png') no-repeat -71px -93px;
+}
+
+.flag-hon {
+  background: url('../images/flag_all.png') no-repeat -106px -93px;
+}
+
+.flag-arg {
+  background: url('../images/flag_all.png') no-repeat 0px -116px;
+}
+
+.flag-bih {
+  background: url('../images/flag_all.png') no-repeat -36px -116px;
+}
+
+.flag-irn {
+  background: url('../images/flag_all.png') no-repeat -71px -116px;
+}
+
+.flag-nga {
+  background: url('../images/flag_all.png') no-repeat -106px -116px;
+}
+
+.flag-ger {
+  background: url('../images/flag_all.png') no-repeat 0px -139px;
+}
+
+.flag-por {
+  background: url('../images/flag_all.png') no-repeat -36px -139px;
+}
+
+.flag-gha {
+  background: url('../images/flag_all.png') no-repeat -71px -139px;
+}
+
+.flag-usa {
+  background: url('../images/flag_all.png') no-repeat -106px -139px;
+}
+
+.flag-bel {
+  background: url('../images/flag_all.png') no-repeat 0px -162px;
+}
+
+.flag-alg {
+  background: url('../images/flag_all.png') no-repeat -36px -162px;
+}
+
+.flag-rus {
+  background: url('../images/flag_all.png') no-repeat -71px -162px;
+}
+
+.flag-kor {
+  background: url('../images/flag_all.png') no-repeat -106px -162px;
 }

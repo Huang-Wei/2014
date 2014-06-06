@@ -15,24 +15,22 @@ block content
         td
           div(id="time#{item.no}" value="#{item.time.valueOf()}") #{item.showTime}
         td(align="center")
-          img.flag.img-thumbnail(src='/images/wc2014/#{item.flag1}.png') 
+          //img.flag.img-thumbnail(src='/images/wc2014/#{item.flag1}.png')
+          div(class="flag flag-#{item.flag1}")
         td(align="center") #{item.team1}
         td
-          .score(align="center" id="score1#{item.no}" contentEditable="true" 
-          onfocus="getFocus('score1#{item.no}')"
-          onblur="lostFocus('score1#{item.no}')") #{item.score1}
+          input.score(value="#{item.score1}") 
         td(align="center") :
         td
-          .score(align="center" id="score2#{item.no}" contentEditable="true" 
-          onfocus="getFocus('score2#{item.no}')"
-          onblur="lostFocus('score2#{item.no}')") #{item.score2}
+          input.score(value="#{item.score2}") 
         td(align="center") #{item.team2}
         td(align="center")
-          img.flag.img-thumbnail(src='/images/wc2014/#{item.flag2}.png') 
+          //img.flag.img-thumbnail(src='/images/wc2014/#{item.flag2}.png')
+          div(class="flag flag-#{item.flag2}")
         td #{item.stage}
         td #{item.group}
         td
-          button.btn.btn-primary(id="btn#{item.no}" type="button" onclick="bet(#{item.no})") 提交比分
+          button.btn.btn-primary(id="subOne#{item.no}") 提交比分
         td [#{item.no}]
 
   script(src='/js/bet.js')

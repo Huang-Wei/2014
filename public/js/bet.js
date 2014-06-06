@@ -4,28 +4,29 @@ function popupMsg(css, msg, matchid) {
   $("#popup").show();
   $("#popup").delay(2500).fadeOut(1000, function() {
     // console.log("callback fadeout");
-    $("#btn"+matchid).removeAttr('disabled');
+    $("#subOne"+matchid).removeAttr('disabled');
     $("#popup").removeClass(css);
   });
 }
 
-function bet(matchid) {
-  var rowno = matchid - 1;
-  // console.log('bet() invoked...');
-  var score1 = $("#score1"+matchid).text();
-  var score2 = $("#score2"+matchid).text();
+$('button[id^="subOne"]').click(function() {
+  var inputs = $(this).parent().parent().find("input");
+  var matchid = $(this).parent().next().text();
+  matchid = parseInt(matchid.substring(1, matchid.length-1)); //比赛id
   var matchTime = $("#time"+matchid).attr("value");
+  var score1 = inputs[0].value.trim();
+  var score2 = inputs[1].value.trim();
 
-  $("#btn"+matchid).attr('disabled', true);
+  $(this).attr('disabled', true);
 
-  if (isNaN(score1) || isNaN(score2)) {
+  if (score1 === '' || score2 === '' || isNaN(score1) || isNaN(score2)) {
     popupMsg('alert-danger', '亲，竞猜比分只能为数字且不含空格', matchid);
   }
   else {
     $.post('/bet/vote', {
       score1: score1,
       score2: score2,
-      rowno: rowno,
+      rowno: matchid-1,
       matchTime: matchTime},
       function(data) {
         var css = data.css;
@@ -33,17 +34,16 @@ function bet(matchid) {
         popupMsg(css, msg, matchid);
     });
   }
-};
+});
 
-function getFocus(id) {
-  $("#"+id).addClass('focus');
-  // $("#"+id).select(); // doesn't work
-};
+$(".score").click(function() {
+  this.select();
+  $(this).addClass('focus');
+});
 
-function lostFocus(id) {
-  // console.log('inputFocus() invoked...');
-  $("#"+id).removeClass('focus');
-};
+$(".score").blur(function() {
+  $(this).removeClass('focus');
+});
 
 $(function() {
   // console.log("load() invoked...");
@@ -53,9 +53,9 @@ $(function() {
   for (var i = 1; i <= rowCount; i++) {
     var matchTime = new Date(parseInt($("#time"+i).attr("value")));
     if (thisTime > matchTime) {
-      $("#btn"+i).attr("disabled", true);
-      $("#score1"+i).attr("contenteditable", false);
-      $("#score2"+i).attr("contenteditable", false);
+      $("#subOne"+i).attr("disabled", true);
+      // $("#score1"+i).attr("contenteditable", false);
+      // $("#score2"+i).attr("contenteditable", false);
     }
   }
 });

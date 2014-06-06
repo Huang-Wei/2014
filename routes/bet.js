@@ -37,8 +37,8 @@ exports.showVoteResults = function(req, res) {
         // pretty score
         var score = bet.bet[index];
         if (score == null) {
-          item["score1"] = "N/A";
-          item["score2"] = "N/A";
+          item["score1"] = "请竞猜";
+          item["score2"] = "请竞猜";
         }
         else {
           item["score1"] = score.split(":")[0];
