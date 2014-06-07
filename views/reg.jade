@@ -2,7 +2,31 @@ extends layout
 
 block content
   .page-header
-    h2 注册功能暂时关闭，要帐号的给hweicdl@cn.ibm.com发信吧。
+    h2 用户注册
+    //h2 注册功能暂时关闭，要帐号的给hweicdl@cn.ibm.com发信吧。
+
+  form.form-horizontal
+    .form-group
+      label.col-sm-2.control-label 用户名
+      .col-sm-3
+        input.form-control(id="user" type="text")
+    .form-group
+      label.col-sm-2.control-label 昵称
+      .col-sm-3
+        input.form-control(id="showname" type="text")
+    .form-group
+      label.col-sm-2.control-label 密码
+      .col-sm-3
+        input.form-control(id="password" type="password")
+    .form-group
+      label.col-sm-2.control-label 重复密码
+      .col-sm-3
+        input.form-control(id="password1" type="password")
+    .form-group
+      .col-sm-offset-2.col-sm-3
+        a.btn.btn-primary(onclick='reg()') 注册
+
+  script(src='/js/2014.js')
 
 //  form(action="/user/reg" method="post")
 //    span 用户名：

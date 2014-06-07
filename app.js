@@ -45,10 +45,12 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.get('/calendar', match.showCalendar);
-app.post('/match', match.updateScore); // admin use
+app.post('/admin/match', match.updateScore); // admin use
+app.post('/admin/adduser', user.adduser); // admin use
 app.get('/match/:no', match.showBetItemsByMatch);
 app.get('/bet/vote', bet.showVoteResults);
 app.post('/bet/vote', bet.vote);
+app.post('/bet/voteAll', bet.voteAll);
 app.get('/board', board.index);
 app.get('/user/login', user.login);
 app.post('/user/login', user.verifyUser);

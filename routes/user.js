@@ -52,7 +52,8 @@ exports.regView = function(req, res) {
   res.render('reg');
 };
 
-exports.reg = function(req, res) {
+// admin use
+exports.adduser = function(req, res) {
   var keycode = req.body.key; // 验证
   if (keycode == null || SHA1(keycode) !== key)
     return res.send("无权限");
@@ -68,4 +69,31 @@ exports.reg = function(req, res) {
     res.send("post注册成功");
   })
   // res.render('reg');
+};
+
+// 正常的用户注册
+exports.reg = function(req, res) {
+  var object = {
+    user: req.body.user,
+    showname: req.body.showname || req.body.user,
+    password: req.body.password || "password"
+  };
+
+  var result = {};
+  mongo.addUser(object, function(err, item) {
+    if (err) {
+      result.css = 'alert-danger';
+      result.msg = '注册失败';
+      // TODO 判断 MongoError 类型
+      // if (err.indexOf('duplicate key error') != -1)
+      //   result.msg = '注册失败：此用户已存在';
+      // else
+      //   result.msg = '注册失败：' + err;
+    }
+    else {
+      result.css = 'alert-success';
+      result.msg = '注册成功';
+    }
+    res.send(result);
+  })
 };

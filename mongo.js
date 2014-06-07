@@ -60,6 +60,18 @@ exports.vote = function(user, score, index, callback) {
   });
 };
 
+// 批量更新投票结果
+exports.voteAll = function(user, update, callback) {
+  MongoClient.connect(url, function(err, db) {
+    if (err) return callback(err);
+    db.collection('bet').update({user: user}, {$set: update}, function(err, updateno) {
+      console.log("批量更新投票结果 updateno="+updateno);
+      callback(err, updateno);
+      db.close();
+    });
+  });
+};
+
 // 1)更新比赛结果
 // 2)自动计算每人的竞猜得分
 exports.updateMatchScore = function(no, score, callback) {

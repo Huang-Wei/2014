@@ -4,29 +4,50 @@ function popupMsg(css, msg, matchid) {
   $("#popup").show();
   $("#popup").delay(2500).fadeOut(1000, function() {
     // console.log("callback fadeout");
-    $("#subOne"+matchid).removeAttr('disabled');
+    if (matchid === 'all')
+      $("#subAll").removeAttr('disabled');
+    else
+      $("#subOne"+matchid).removeAttr('disabled');
     $("#popup").removeClass(css);
   });
 };
 
-// $('.score').each(function() {
-//   var elem = $(this);
-//   // Save current value of element
-//   elem.data('oldVal', elem.val());
-//   // Look for changes in the value
-//   elem.bind("propertychange keyup input paste", function(event){
-//   // If value has changed...
-//     if (elem.data('oldVal') != elem.val()) {
-//       // Updated stored value
-//       elem.data('oldVal', elem.val());
-//       console.log('xxx');
-//     }
-//   });
-// });
+$("#subAll").click(function() {
+  $(this).attr('disabled', true);
 
-// $('.score').propertychange(function() {
-//   console.log('xxx');
-// })
+  // 遍历数据，整理出修改过的数据
+  var update = {};
+  // rule 1: 过了比赛时间的数据不提交
+  // rule 2: 未更改页面初始值（即'请竞猜')的数据不提交
+  var rowCount = $('button[id^="subOne"]').length;
+  var thisTime = new Date();
+  for (var i = 1; i <= rowCount; i++) {
+    var matchTime = new Date(parseInt($("#time"+i).attr("value")));
+    if (thisTime < matchTime) {
+      var inputs = $("#subOne"+i).parent().parent().find("input[type='text']");
+      var score1 = inputs[0].value.trim();
+      var score2 = inputs[1].value.trim();
+      if (score1 !== '请竞猜' || score2 !== '请竞猜') {
+        update['bet.' + (i-1)] = score1+':'+score2;
+      }
+    }
+  }
+
+  // 如果无数据可提交
+  if (Object.keys(update).length === 0) {
+    return popupMsg('alert-warning', '无数据可提交', 'all');
+  }
+
+  // 提交所有修改过的比分
+  $.post('/bet/voteAll', {update: update},
+    function(data) {
+      var css = data.css;
+      var msg = data.msg;
+      popupMsg(css, msg, 'all');
+  });
+
+  // popupMsg('alert-info', 'please wait...', 'all');
+});
 
 $('button[id^="subOne"]').click(function() {
   var inputs = $(this).parent().parent().find("input[type='text']");
@@ -68,14 +89,12 @@ $(function() {
   // console.log("load() invoked...");
   var rowCount = $('button[id^="subOne"]').length;
   var thisTime = new Date();
-  console.log("table rowCount : " + rowCount);
+  // console.log("table rowCount : " + rowCount);
   for (var i = 1; i <= rowCount; i++) {
     var matchTime = new Date(parseInt($("#time"+i).attr("value")));
     if (thisTime > matchTime) {
       $("#subOne"+i).attr("disabled", true);
       $("#subOne"+i).parent().parent().find("input").attr('disabled', true);
-      // $("#score1"+i).attr("contenteditable", false);
-      // $("#score2"+i).attr("contenteditable", false);
     }
   }
 });

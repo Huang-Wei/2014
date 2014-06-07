@@ -9,7 +9,7 @@ exports.showVoteResults = function(req, res) {
   }
 
   mongo.getVoteItemsByUser(user, function(err, bet) {
-    // TODO: bet为一个长度为64的数组 or 一个空的数组
+    // bet为一个长度为64的空数组
     if (err) {
       console.log(err);
       return;
@@ -58,7 +58,6 @@ exports.vote = function(req, res) {
     result.msg = 'alert-warning';
     result.msg = '用户未登陆';
     return res.send(result);
-    // return res.redirect('/user/login'); // ？？？
   }
 
   var score1 = req.body.score1;
@@ -82,5 +81,29 @@ exports.vote = function(req, res) {
     result.msg = '竞猜比分成功';
     result.css = 'alert-success';
     res.send(result);
-  })
+  });
+};
+
+exports.voteAll = function(req, res) {
+  var result = {};
+
+  var user = req.session.user;
+  if (user == null || user === '') {
+    result.msg = 'alert-warning';
+    result.msg = '用户未登陆';
+    return res.send(result);
+  }
+
+  var update = req.body.update;
+
+  mongo.voteAll(user, update, function(err) {
+    if (err) {
+      result.msg = '批量竞猜比分失败:' + err;
+      result.css = 'alert-danger';
+      return res.send(result);
+    }
+    result.msg = '批量竞猜比分成功';
+    result.css = 'alert-success';
+    res.send(result);
+  });
 };
