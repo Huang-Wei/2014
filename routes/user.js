@@ -1,4 +1,6 @@
 var mongo = require('../mongo');
+var key = require('../db/key');
+var SHA1 = require('../db/sha1').SHA1;
 
 exports.login = function(req, res) {
   res.render('login');
@@ -51,6 +53,10 @@ exports.regView = function(req, res) {
 };
 
 exports.reg = function(req, res) {
+  var keycode = req.body.key; // 验证
+  if (keycode == null || SHA1(keycode) !== key)
+    return res.send("无权限");
+
   var object = {
     user: req.body.user,
     showname: req.body.showname || req.body.user,

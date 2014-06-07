@@ -1,0 +1,33 @@
+extends layout
+
+block content
+  .page-header
+    h2 比赛[#{match.no}]: #{match.team1} VS #{match.team2} 目前竞猜结果
+
+  script(src='/js/canvasjs.min.js')
+  //script(src='/js/mychart.js')
+
+  #chartContainer(style="height: 300px; width: 80%;")
+
+  script.
+    var chart = new CanvasJS.Chart("chartContainer", {
+
+      title:{
+        text: "比赛[#{match.no}]: #{match.team1} VS #{match.team2} 目前竞猜结果"              
+      },
+      axisY: {
+        title: "竞猜人数",
+        minimum: 0
+      },
+      axisX: {
+        title: "竞猜比分"
+      },
+      data: [{
+         /*** Change type "column" to "bar", "area", "line" or "pie"***/
+        type: "column",
+        toolTipContent: "<span style='\"'color: {color};'\"'>{label}</span><br/>{y}人竞猜此比分<br/>{name}",
+        dataPoints: !{dataPoints}
+      }]
+    });
+
+    chart.render();

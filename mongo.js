@@ -19,10 +19,16 @@ exports.getAllMatches = function(callback) {
 function getBetItemsByMatch(no, callback) {
   MongoClient.connect(url, function(err, db) {
     if (err) return callback(err);
-    db.collection('bet').find({}, {_id:0, user:1, bet: {$slice: [no-1,no]}}).toArray(function(err, items) {
+    db.collection('bet').find({}, {_id:0, user:1, showname:1, bet: {$slice: [no-1,no]}}).toArray(function(err, items) {
       // console.log("items="+items);
-      callback(err, items);
-      db.close();
+      if (err) {
+        db.close();
+        return callback(err, items);
+      }
+      db.collection('match').find({no: no}).toArray(function(err, matches) {
+        callback(err, items, matches[0]);
+        db.close();
+      });
     });
   });
 };

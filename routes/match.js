@@ -1,24 +1,58 @@
 var mongo = require('../mongo');
 var util = require('../util');
+var key = require('../db/key');
+var SHA1 = require('../db/sha1').SHA1;
+
+function getIndexInArray(dataPoints, bet) {
+  for (var i = 0; i < dataPoints.length; i++) {
+    if (dataPoints[i].label === bet)
+      return i;
+  }
+  return null;
+};
 
 exports.showBetItemsByMatch = function(req, res) {
   var no = parseInt(req.params.no); // match number
 
-  mongo.getBetItemsByMatch(no, function(err, items) {
+  mongo.getBetItemsByMatch(no, function(err, items, match) {
     if (err) {
       console.log(err);
       return;
     }
-    res.render('match', {
-      items: items,
-      no: no});
+    // 重新组织数据
+    var dataPoints = [];
+    items.forEach(function(item) {
+      var bet = item.bet[0] == null ? '未竞猜' : item.bet[0];
+
+      var index = getIndexInArray(dataPoints, bet);
+
+      if (index != null) {
+        dataPoints[index].y++;
+        dataPoints[index].name.push(item.showname);
+      }
+      else {
+        var data = {};
+        data.label = bet;
+        data.y = 1;
+        data.name = new Array(item.showname);
+        // data.x = (dataPoints.length+1)*10
+        dataPoints.push(data);
+      }
+    });
+
+    res.render('chart', {
+      // items: items,
+      dataPoints: JSON.stringify(dataPoints),
+      match: match});
   });
 };
 
 // 用于接收curl命令更新某场比赛比分
 // curl -X POST http://localhost:3000/match -d 'no=1&score=3:0'
 exports.updateScore = function(req, res) {
-  // TODO：验证用户名密码
+  var keycode = req.body.key; // 验证
+  if (keycode == null || SHA1(keycode) !== key)
+    return res.send("无权限");
   
   var no = parseInt(req.body.no);
   var score = req.body.score;
