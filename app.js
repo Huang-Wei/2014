@@ -7,6 +7,7 @@ var bet = require('./routes/bet');
 var board = require('./routes/board');
 var user = require('./routes/user');
 var circle = require('./routes/circle');
+var util = require('./util');
 
 var app = express();
 
@@ -24,7 +25,8 @@ app.use(express.methodOverride());
 app.use(express.cookieParser());
 app.use(express.session({
   store: new MongoStore({
-    url: 'mongodb://localhost:27017/2014'
+    // url: 'mongodb://localhost:27017/2014'
+    url: util.getURL()
   }),
   secret: 'hweicdl@cn.ibm.com'
 }));

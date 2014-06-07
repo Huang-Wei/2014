@@ -1,6 +1,7 @@
 var MongoClient = require('mongodb').MongoClient;
-var url = 'mongodb://localhost:27017/2014';
 var util = require('./util');
+var url = util.getURL();
+// var url = 'mongodb://localhost:27017/2014';
 
 // 返回所有比赛的比赛结果
 exports.getAllMatches = function(callback) {

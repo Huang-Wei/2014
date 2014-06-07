@@ -1,0 +1,6 @@
+applications:
+- name: 2014
+  memory: 2G
+  command: node app.js
+  services:
+  - mg2014
