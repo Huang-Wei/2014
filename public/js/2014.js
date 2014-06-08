@@ -60,8 +60,23 @@ function reg() {
         var msg = data.msg;
 
         if (css == 'alert-success') {
-          popupMsg(css, msg);
-          location.href = '/user/login';
+          // popupMsg(css, msg);
+          // location.href = '/user/login';
+          // 直接登录
+          $.post('/user/login', {
+            user: user,
+            password: password},
+            function(data) {
+              var css = data.css;
+              var msg = data.msg;
+
+              if (css == 'alert-success') {
+                location.href = '/bet/vote';
+              }
+              else {
+                popupMsg(css, msg);
+              }
+          });
         }
         else {
           popupMsg(css, msg);
