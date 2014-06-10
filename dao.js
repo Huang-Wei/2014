@@ -1,88 +1,63 @@
-var MongoClient = require('mongodb').MongoClient;
+// var MongoClient = require('mongodb').MongoClient;
 var util = require('./util');
 var url = util.getURL();
 // var url = 'mongodb://localhost:27017/2014';
 
-// 返回所有比赛的比赛结果
-exports.getAllMatches = function(callback) {
-  MongoClient.connect(url, function(err, db) {
-    if (err) return callback(err);
+function dao(db) {
+  // 返回所有比赛的比赛结果
+  function getAllMatches(callback) {
     // 按比赛序号升序排序
     db.collection('match').find().sort({no:1}).toArray(function(err, items) {
-      // console.log("items="+items);
       callback(err, items);
-      db.close();
     });
-  });
-};
+  };
 
-// 返回某场比赛竞猜结果
-function getBetItemsByMatch(no, callback) {
-  MongoClient.connect(url, function(err, db) {
-    if (err) return callback(err);
+  // 返回某场比赛竞猜结果
+  function getBetItemsByMatch(no, callback) {
     db.collection('bet').find({}, {_id:0, user:1, showname:1, bet: {$slice: [no-1,no]}}).toArray(function(err, items) {
       // console.log("items="+items);
       if (err) {
-        db.close();
         return callback(err, items);
       }
       db.collection('match').find({no: no}).toArray(function(err, matches) {
         callback(err, items, matches[0]);
-        db.close();
       });
     });
-  });
-};
+  };
 
-// 返回某人的所有投票结果
-exports.getVoteItemsByUser = function(user, callback) {
-  MongoClient.connect(url, function(err, db) {
-    if (err) return callback(err);
+  // 返回某人的所有投票结果
+  function getVoteItemsByUser(user, callback) {
     db.collection('bet').find({user: user}, {_id:0, bet:1}).nextObject(function(err, items) {
-      // console.log("items="+items);
       callback(err, items);
-      db.close();
     });
-  });
-};
+  };
 
-// 更新投票结果
-exports.vote = function(user, score, index, callback) {
-  MongoClient.connect(url, function(err, db) {
-    if (err) return callback(err);
+  // 更新投票结果
+  function vote(user, score, index, callback) {
     // 更新数组里的某个值
     var update = {};
     update['bet.' + index] = score;
     db.collection('bet').update({user: user}, {$set: update}, function(err, updateno) {
       console.log("更新投票结果 updateno="+updateno);
       callback(err, updateno);
-      db.close();
     });
-  });
-};
+  };
 
-// 批量更新投票结果
-exports.voteAll = function(user, update, callback) {
-  MongoClient.connect(url, function(err, db) {
-    if (err) return callback(err);
+  // 批量更新投票结果
+  function voteAll(user, update, callback) {
     db.collection('bet').update({user: user}, {$set: update}, function(err, updateno) {
       console.log("批量更新投票结果 updateno="+updateno);
       callback(err, updateno);
-      db.close();
     });
-  });
-};
+  };
 
-// 1)更新比赛结果
-// 2)自动计算每人的竞猜得分
-exports.updateMatchScore = function(no, score, callback) {
-  MongoClient.connect(url, function(err, db) {
-    if (err) return callback(err);
+  // 1)更新比赛结果
+  // 2)自动计算每人的竞猜得分
+  function updateMatchScore(no, score, callback) {
     // 1)更新比赛结果
     db.collection('match').update({no: no}, {$set: {score: score}}, function(err, updateno) {
       console.log("更新比赛结果"+updateno);
       if (err || updateno === 0) {
-        db.close();
         return callback(err, updateno);
       }
 
@@ -100,60 +75,42 @@ exports.updateMatchScore = function(no, score, callback) {
               if (err) callback(err);
               if (cbCheck == items.length) {
                 callback("全部计算完毕");
-                db.close();
               }
             });
           });
         })();
-        
       });
-
-      // callback("提前退出");
-      // db.close();
     });
-  });
-};
+  };
 
-// 积分榜
-exports.getBoard = function(query, callback) {
-  MongoClient.connect(url, function(err, db) {
-    if (err) return callback(err);
+  // 积分榜
+  function getBoard(query, callback) {
     // top 10
     if (query == null) {
       db.collection('bet').find({}, {_id:0, bet:0}).sort({betscore:-1}).limit(10).toArray(function(err, items) {
         callback(err, items);
-        db.close();
       });
     }
     // 圈子积分榜
     else {
       db.collection('bet').find(query, {_id:0, bet:0}).sort({betscore:-1}).toArray(function(err, items) {
         callback(err, items);
-        db.close();
       });
     }
-  });
-};
+  };
 
-// 登录
-exports.getUserByName = function(user, password, callback) {
-  MongoClient.connect(url, function(err, db) {
-    if (err) return callback(err);
+  // 登录
+  function getUserByName(user, password, callback) {
     db.collection('user').find({user: user}, {_id:0}).nextObject(function(err, item) {
       console.log("登录 item="+item);
       callback(err, item);
-      db.close();
     });
-  });
-};
+  };
 
-// 注册
-exports.addUser = function(user, callback) {
-  MongoClient.connect(url, function(err, db) {
-    if (err) return callback(err);
+  // 注册
+  function addUser(user, callback) {
     db.collection('user').insert(user, function(err, item) {
       if (err) {
-        db.close();
         return callback(err);
       }
       console.log("添加用户 item="+item);
@@ -166,49 +123,35 @@ exports.addUser = function(user, callback) {
       db.collection('bet').insert(bet, function(err, item) {
         console.log("添加用户bet纪录 item="+item);
         callback(err, item);
-        db.close();
       });
     });
-  });
-};
+  };
 
-// 我的圈子：当前用户的圈子 > 所有圈子的信息
-exports.getMyCircles = function(user, callback) {
-  MongoClient.connect(url, function(err, db) {
-    if (err) return callback(err);
+  // 我的圈子：当前用户的圈子 > 所有圈子的信息
+  function getMyCircles(user, callback) {
     db.collection('user').find({user: user}, {circle: 1}).nextObject(function(err, item) {
       if (err) {
-        db.close();
         return callback(err);
       }
       console.log("User Circle item="+item);
       
       db.collection('circle').find({name: {$in: item.circle}}).toArray(function(err, items) {
         callback(err, items);
-        db.close();
       })
     });
-  });
-};
+  };
 
-// 圈子的所有用户
-exports.getUsersByCircle = function(name, callback) {
-  MongoClient.connect(url, function(err, db) {
-    if (err) return callback(err);
+  // 圈子的所有用户
+  function getUsersByCircle(name, callback) {
     db.collection('user').find({circle: name}, {user: 1}).toArray(function(err, users) {
       callback(err, users);
-      db.close();
     });
-  });
-};
+  };
 
-// 创建圈子by name
-exports.createCircleByName = function(circle, callback) {
-  MongoClient.connect(url, function(err, db) {
-    if (err) return callback(err);
+  // 创建圈子by name
+  function createCircleByName(circle, callback) {
     db.collection('circle').insert(circle, function(err, item) {
       if (err) {
-        db.close();
         return callback(err);
       }
 
@@ -222,42 +165,29 @@ exports.createCircleByName = function(circle, callback) {
       db.collection('user').update({user: circle.owner}, update, function(err, item) {
         console.log("user circle item = " + item);
         callback(err, item);
-        db.close();
       });
     });
-  });
-};
+  };
 
-// 用户加入circle
-exports.joinCircle = function(user, circleName, callback) {
-  // TODO: 用户最多只能加入5个圈子?
-  MongoClient.connect(url, function(err, db) {
-    if (err) return callback(err);
+  // 用户加入circle
+  function joinCircle(user, circleName, callback) {
+    // TODO: 用户最多只能加入5个圈子?
     db.collection('user').update({user: user}, {$push: {circle: circleName}}, function(err, item) {
       callback(err, item);
-      db.close();
     });
-  });
-};
+  };
 
-// 用户退出circle
-exports.quitCircle = function(user, circleName, callback) {
-  MongoClient.connect(url, function(err, db) {
-    if (err) return callback(err);
+  // 用户退出circle
+  function quitCircle(user, circleName, callback) {
     db.collection('user').update({user: user}, {$pull: {circle: circleName}}, function(err, item) {
       callback(err, item);
-      db.close();
     });
-  });
-};
+  };
 
-// 解散circle
-exports.discardCircle = function(user, circleName, callback) {
-  MongoClient.connect(url, function(err, db) {
-    if (err) return callback(err);
+  // 解散circle
+  function discardCircle(user, circleName, callback) {
     db.collection('circle').remove({owner:user, name:circleName}, function(err, item) {
       if (err || item == 0) { // 只有圈子的owner才能删除此圈子
-        db.close();
         return callback(err, item);
       }
 
@@ -267,20 +197,70 @@ exports.discardCircle = function(user, circleName, callback) {
         // callback(err, items);
         collection.update({user:user}, {$pull: {circleAdmin: circleName}}, function(err, items) {
           callback(err, items);
-          db.close();
         });
       });
     });
-  });
-};
+  };
 
-exports.getCirclesByUser = function(user, callback) {
-  MongoClient.connect(url, function(err, db) {
+  function getCirclesByUser(user, callback) {
     db.collection('user').find({user: user}, {circle:1}).nextObject(function(err, item) {
       callback(err, item);
-      db.close();
     });
-  });
+  };
+
+  function getServerStatus(callback) {
+    var admin = db.admin();
+    if (process.env.VCAP_SERVICES) {
+      var credentials = JSON.parse(process.env.VCAP_SERVICES)['mongodb-2.2'][0].credentials;
+      admin.authenticate(credentials.username, credentials.password, function(err, result) {
+        if (err) {
+          return callback(err, result);
+        }
+        admin.command({serverStatus:1}, function(err, info) {
+          callback(err, info);
+        });
+      });
+    }
+    else {
+      admin.command({serverStatus:1}, function(err, info) {
+        callback(err, info);
+      });
+    }
+  };
+
+  function insertMatch(match, callback) {
+    db.collection('match').insert(match, function(err, item) {
+      callback(err, item);
+    });
+  };
+
+  function createIndex(col, index, options, callback) {
+    db.createIndex(col, index, options, function(err, indexname) {
+      callback(err, indexname);
+    });
+  };
+
+  return {
+    getAllMatches: getAllMatches,
+    getBetItemsByMatch: getBetItemsByMatch,
+    getVoteItemsByUser: getVoteItemsByUser,
+    vote: vote,
+    voteAll: voteAll,
+    updateMatchScore: updateMatchScore,
+    getBoard: getBoard,
+    getUserByName: getUserByName,
+    addUser: addUser,
+    getMyCircles: getMyCircles,
+    getUsersByCircle: getUsersByCircle,
+    createCircleByName: createCircleByName,
+    joinCircle: joinCircle,
+    quitCircle: quitCircle,
+    discardCircle: discardCircle,
+    getCirclesByUser: getCirclesByUser,
+    getServerStatus: getServerStatus,
+    insertMatch: insertMatch,
+    createIndex: createIndex
+  }
 };
 
-exports.getBetItemsByMatch = getBetItemsByMatch;
+exports = module.exports = dao;

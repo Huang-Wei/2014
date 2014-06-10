@@ -1,7 +1,7 @@
-var mongo = require('../mongo');
+// var dao = require('../dao');
 
-exports.index = function(req, res) {
-  mongo.getBoard(null, function(err, items) {
+exports.index = function(req, res, dao) {
+  dao.getBoard(null, function(err, items) {
     if (items == null || items.length == 0)
       return res.render('board', {items: {}});
 
@@ -18,7 +18,7 @@ exports.index = function(req, res) {
     var cbCheck = 0;
     items.forEach(function(item) {
       (function() {
-        mongo.getCirclesByUser(item.user, function(err, circle) {
+        dao.getCirclesByUser(item.user, function(err, circle) {
           item.circle = circle.circle;
 
           if (++cbCheck == items.length)

@@ -1,4 +1,4 @@
-var mongo = require('../mongo');
+// var dao = require('../dao');
 var util = require('../util');
 var key = require('../db/key');
 var SHA1 = require('../db/sha1').SHA1;
@@ -11,10 +11,10 @@ function getIndexInArray(dataPoints, bet) {
   return null;
 };
 
-exports.showBetItemsByMatch = function(req, res) {
+exports.showBetItemsByMatch = function(req, res, dao) {
   var no = parseInt(req.params.no); // match number
 
-  mongo.getBetItemsByMatch(no, function(err, items, match) {
+  dao.getBetItemsByMatch(no, function(err, items, match) {
     if (err) {
       console.log(err);
       return;
@@ -49,7 +49,7 @@ exports.showBetItemsByMatch = function(req, res) {
 
 // 用于接收curl命令更新某场比赛比分
 // curl -X POST http://localhost:3000/match -d 'no=1&score=3:0'
-exports.updateScore = function(req, res) {
+exports.updateScore = function(req, res, dao) {
   var keycode = req.body.key; // 验证
   if (keycode == null || SHA1(keycode) !== key)
     return res.send("无权限");
@@ -57,7 +57,7 @@ exports.updateScore = function(req, res) {
   var no = parseInt(req.body.no);
   var score = req.body.score;
 
-  mongo.updateMatchScore(no, score, function(err, updateno) {
+  dao.updateMatchScore(no, score, function(err, updateno) {
     console.log(err);
     var result = {}
     if (err) {
@@ -75,8 +75,8 @@ exports.updateScore = function(req, res) {
   });
 };
 
-exports.showCalendar = function(req, res) {
-  mongo.getAllMatches(function(err, items) {
+exports.showCalendar = function(req, res, dao) {
+  dao.getAllMatches(function(err, items) {
     if (err) {
       console.log(err);
       return;
@@ -106,5 +106,32 @@ exports.showCalendar = function(req, res) {
       }
     });
     res.render('calendar', {items: items});
+  });
+};
+
+// admin use
+exports.insertMatch = function(req, res, dao) {
+  var keycode = req.body.key; // 验证
+  if (keycode == null || SHA1(keycode) !== key)
+    return res.send("无权限");
+
+  var match = req.body.match;
+
+  dao.insertMatch(match, function(err, result) {
+    res.send({err: err, result: result});
+  });
+};
+
+exports.createIndex = function(req, res, dao) {
+  var keycode = req.body.key; // 验证
+  if (keycode == null || SHA1(keycode) !== key)
+    return res.send("无权限");
+
+  var col = req.body.col;
+  var index = req.body.index;
+  var options = req.body.options;
+
+  dao.createIndex(col, index, options, function(err, indexname) {
+    res.send({err: err, indexname: indexname});
   });
 };

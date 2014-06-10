@@ -1,12 +1,12 @@
-var mongo = require('../mongo');
+var dao = require('../dao');
 var key = require('../db/key');
 var SHA1 = require('../db/sha1').SHA1;
 
-exports.login = function(req, res) {
+exports.login = function(req, res, dao) {
   res.render('login');
 };
 
-exports.verifyUser = function(req, res) {
+exports.verifyUser = function(req, res, dao) {
   var result = {};
   if (req.session.user) {
     result.css = 'alert-warning';
@@ -17,7 +17,7 @@ exports.verifyUser = function(req, res) {
   var user = req.body.user;
   var password = req.body.password;
 
-  mongo.getUserByName(user, password, function(err, item) {
+  dao.getUserByName(user, password, function(err, item) {
     if (err || item == null) {
       result.css = 'alert-danger';
       result.msg = '登录失败：无此用户';
@@ -39,21 +39,22 @@ exports.verifyUser = function(req, res) {
   });
 };
 
-exports.logout = function(req, res) {
+exports.logout = function(req, res, dao) {
   if (req.session) {
-    req.session.auth = null;
-    res.clearCookie('auth');
-    req.session.destroy(function() {});
+    req.session = null;
+    // req.session.auth = null;
+    // res.clearCookie('auth');
+    // req.session.destroy(function() {});
   }
   res.redirect('/');
 };
 
-exports.regView = function(req, res) {
+exports.regView = function(req, res, dao) {
   res.render('reg');
 };
 
 // admin use
-exports.adduser = function(req, res) {
+exports.adduser = function(req, res, dao) {
   var keycode = req.body.key; // 验证
   if (keycode == null || SHA1(keycode) !== key)
     return res.send("无权限");
@@ -64,7 +65,7 @@ exports.adduser = function(req, res) {
     password: req.body.password || "password"
   };
 
-  mongo.addUser(object, function(err, item) {
+  dao.addUser(object, function(err, item) {
     if (err) return res.send("post注册失败");
     res.send("post注册成功");
   })
@@ -72,7 +73,7 @@ exports.adduser = function(req, res) {
 };
 
 // 正常的用户注册
-exports.reg = function(req, res) {
+exports.reg = function(req, res, dao) {
   var object = {
     user: req.body.user,
     showname: req.body.showname || req.body.user,
@@ -80,11 +81,11 @@ exports.reg = function(req, res) {
   };
 
   var result = {};
-  mongo.addUser(object, function(err, item) {
+  dao.addUser(object, function(err, item) {
     if (err) {
       result.css = 'alert-danger';
       result.msg = '注册失败';
-      // TODO 判断 MongoError 类型
+      // TODO 判断 daoError 类型
       // if (err.indexOf('duplicate key error') != -1)
       //   result.msg = '注册失败：此用户已存在';
       // else

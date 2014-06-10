@@ -1,11 +1,11 @@
-var mongo = require('../mongo');
+// var dao = require('../dao');
 
-exports.index = function(req, res) {
+exports.index = function(req, res, dao) {
   if (req.session.user == null) {
     return res.redirect('/user/login');
   }
 
-  mongo.getMyCircles(req.session.user, function(err, items) {
+  dao.getMyCircles(req.session.user, function(err, items) {
     if (err) {
       console.log(err);
       return res.render('circle/index', {items:{}});
@@ -14,11 +14,11 @@ exports.index = function(req, res) {
   });
 };
 
-exports.showBoard = function(req, res) {
+exports.showBoard = function(req, res, dao) {
   // var circleNo = parseInt(req.params.no);
   var circleName = req.params.circleName;
 
-  mongo.getUsersByCircle(circleName, function(err, users) {
+  dao.getUsersByCircle(circleName, function(err, users) {
     if (err || users == null || users.length == 0) {
       console.log(err);
       return res.render('board', {items:{}});
@@ -33,7 +33,7 @@ exports.showBoard = function(req, res) {
       if (item.user === loginUser)
         enableJoin = false;
     });
-    mongo.getBoard({user: {$in: userList}}, function(err, items) {
+    dao.getBoard({user: {$in: userList}}, function(err, items) {
       res.render('board', {
         items: items,
         circleName: circleName,
@@ -43,7 +43,7 @@ exports.showBoard = function(req, res) {
   });
 };
 
-exports.createView = function(req, res) {
+exports.createView = function(req, res, dao) {
   if (req.session.user == null) {
     return res.redirect('/user/login');
   }
@@ -51,7 +51,7 @@ exports.createView = function(req, res) {
   res.render('circle/create');
 };
 
-exports.create = function(req, res) {
+exports.create = function(req, res, dao) {
   if (req.session.user == null) {
     return res.redirect('/user/login');
   }
@@ -62,13 +62,13 @@ exports.create = function(req, res) {
     owner: req.session.user
   };
 
-  mongo.createCircleByName(circle, function(err, item) {
+  dao.createCircleByName(circle, function(err, item) {
     // TODO: 错误处理
     res.redirect('circle');
   });
 };
 
-exports.join = function(req, res) {
+exports.join = function(req, res, dao) {
   if (req.session.user == null) {
     return res.redirect('/user/login');
   }
@@ -76,13 +76,13 @@ exports.join = function(req, res) {
   var circleName = req.params.circleName;
   var user = req.session.user;
 
-  mongo.joinCircle(user, circleName, function(err, item) {
+  dao.joinCircle(user, circleName, function(err, item) {
     // TODO: 错误处理
     res.redirect('circle/'+circleName);
   });
 };
 
-exports.quit = function(req, res) {
+exports.quit = function(req, res, dao) {
   if (req.session.user == null) {
     return res.redirect('/user/login');
   }
@@ -90,13 +90,13 @@ exports.quit = function(req, res) {
   var circleName = req.params.circleName;
   var user = req.session.user;
 
-  mongo.quitCircle(user, circleName, function(err, item) {
+  dao.quitCircle(user, circleName, function(err, item) {
     // TODO: 错误处理
     res.redirect('circle');
   });
 };
 
-exports.discard = function(req, res) {
+exports.discard = function(req, res, dao) {
   if (req.session.user == null) {
     return res.redirect('/user/login');
   }
@@ -104,7 +104,7 @@ exports.discard = function(req, res) {
   var circleName = req.params.circleName;
   var user = req.session.user;
 
-  mongo.discardCircle(user, circleName, function(err, item) {
+  dao.discardCircle(user, circleName, function(err, item) {
     if (item == 0)
       console.log("只有圈子owner才能解散圈子");
     // TODO: 错误处理

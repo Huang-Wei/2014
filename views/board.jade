@@ -25,31 +25,51 @@ block content
       //th 猜错
     tbody
     each item, index in items
-      tr
-        td #{index+1}
-        td #{item.showname}
-        td
-          if item.win
-            | #{item.win}
-          else
-            | 0
-        td
-          if item.draw
-            | #{item.draw}
-          else
-            | 0
-        td
-          if item.betscore
-            span.badge #{item.betscore}
-          else
-            span.badge 0
-        td
-          if item.circle !== undefined
-            each circle in item.circle
-              a.btn.btn-warning(href="/circle/#{circle}") #{circle}
-              | 
-        //if item.lose
-          //td #{item.lose}
-        //else
-          //td 0
-        
+      if user == item.user
+        tr.danger
+          td #{index+1}
+          td #{item.showname}
+          td
+            if item.win
+              | #{item.win}
+            else
+              | 0
+          td
+            if item.draw
+              | #{item.draw}
+            else
+              | 0
+          td
+            if item.betscore
+              span.badge #{item.betscore}
+            else
+              span.badge 0
+          td
+            if item.circle !== undefined
+              each circle in item.circle
+                a.btn.btn-warning(href="/circle/#{circle}") #{circle}
+                | 
+      else
+        tr
+          td #{index+1}
+          td #{item.showname}
+          td
+            if item.win
+              | #{item.win}
+            else
+              | 0
+          td
+            if item.draw
+              | #{item.draw}
+            else
+              | 0
+          td
+            if item.betscore
+              span.badge #{item.betscore}
+            else
+              span.badge 0
+          td
+            if item.circle !== undefined
+              each circle in item.circle
+                a.btn.btn-warning(href="/circle/#{circle}") #{circle}
+                | 

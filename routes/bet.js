@@ -1,20 +1,20 @@
-var mongo = require('../mongo');
+// var dao = require('../dao');
 var util = require('../util');
 
-exports.showVoteResults = function(req, res) {
+exports.showVoteResults = function(req, res, dao) {
   var user = req.session.user;
   if (user == null || user === '') {
     res.send("用户未登陆");
     return res.redirect('/user/login');
   }
 
-  mongo.getVoteItemsByUser(user, function(err, bet) {
+  dao.getVoteItemsByUser(user, function(err, bet) {
     // bet为一个长度为64的空数组
     if (err) {
       console.log(err);
       return;
     }
-    mongo.getAllMatches(function(err, items) {
+    dao.getAllMatches(function(err, items) {
       if (err) {
         console.log(err);
         return;
@@ -50,7 +50,7 @@ exports.showVoteResults = function(req, res) {
   });
 };
 
-exports.vote = function(req, res) {
+exports.vote = function(req, res, dao) {
   var result = {};
 
   var user = req.session.user;
@@ -72,7 +72,7 @@ exports.vote = function(req, res) {
     return res.send(result); // 可能是用户在改系统时间...
   }
 
-  mongo.vote(user, score1+":"+score2, rowno, function(err) {
+  dao.vote(user, score1+":"+score2, rowno, function(err) {
     if (err) {
       result.msg = '竞猜比分失败:' + err;
       result.css = 'alert-danger';
@@ -84,7 +84,7 @@ exports.vote = function(req, res) {
   });
 };
 
-exports.voteAll = function(req, res) {
+exports.voteAll = function(req, res, dao) {
   var result = {};
 
   var user = req.session.user;
@@ -96,7 +96,7 @@ exports.voteAll = function(req, res) {
 
   var update = req.body.update;
 
-  mongo.voteAll(user, update, function(err) {
+  dao.voteAll(user, update, function(err) {
     if (err) {
       result.msg = '批量竞猜比分失败:' + err;
       result.css = 'alert-danger';

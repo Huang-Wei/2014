@@ -3,4 +3,4 @@ applications:
   memory: 2G
   command: node app.js
   services:
-  - mg2014
+  - wc2014
