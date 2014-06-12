@@ -48,7 +48,8 @@ exports.showBetItemsByMatch = function(req, res, dao) {
 };
 
 // 用于接收curl命令更新某场比赛比分
-// curl -X POST http://localhost:3000/match -d 'no=1&score=3:0'
+// curl -X POST http://localhost:3000/admin/match -d 'key=xxx&no=1&score=3:0'
+// curl -H "Content-type: application/json" -X POST http://localhost:3000/admin/match -d '{"key":"xxx","no":1,"score":"3:0"}'
 exports.updateScore = function(req, res, dao) {
   var keycode = req.body.key; // 验证
   if (keycode == null || SHA1(keycode) !== key)

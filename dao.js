@@ -66,6 +66,9 @@ function dao(db) {
 
       getBetItemsByMatch(no, function(err, items) {
         if (err) return callback(err);
+        if (items.length == 0)
+          return callback("无人投票");
+        
         var cbCheck = 0;
         (function() {
           items.forEach(function(item, index) {

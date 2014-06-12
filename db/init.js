@@ -416,7 +416,7 @@ db.match.insert(
   "group":team.e1.group,
   "team2":team.e3.name,
   "flag2":team.e3.id,
-  "time":new Date(Date.UTC(2014,5,20,20,00)),
+  "time":new Date(Date.UTC(2014,5,20,19,00)),
   "stage":"小组赛"}
 );
 db.match.insert(
