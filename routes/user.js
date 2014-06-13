@@ -1,9 +1,20 @@
 var dao = require('../dao');
-var key = require('../db/key');
-var SHA1 = require('../db/sha1').SHA1;
 
 exports.login = function(req, res, dao) {
   res.render('login');
+};
+
+exports.verifyIfLogin = function(req, res, next) {
+  var user = req.session.user;
+  var result = {};
+  if (user == null || user === '') {
+    result.css = 'alert-warning';
+    result.msg = '用户未登录，请先登录再操作';
+    return res.send(result);
+  }
+  else {
+    next();
+  }
 };
 
 exports.verifyUser = function(req, res, dao) {
@@ -55,10 +66,6 @@ exports.regView = function(req, res, dao) {
 
 // admin use
 exports.adduser = function(req, res, dao) {
-  var keycode = req.body.key; // 验证
-  if (keycode == null || SHA1(keycode) !== key)
-    return res.send("无权限");
-
   var object = {
     user: req.body.user,
     showname: req.body.showname || req.body.user,
@@ -69,7 +76,6 @@ exports.adduser = function(req, res, dao) {
     if (err) return res.send("post注册失败");
     res.send("post注册成功");
   })
-  // res.render('reg');
 };
 
 // 正常的用户注册

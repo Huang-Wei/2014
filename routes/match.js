@@ -1,7 +1,5 @@
 // var dao = require('../dao');
 var util = require('../util');
-var key = require('../db/key');
-var SHA1 = require('../db/sha1').SHA1;
 
 function getIndexInArray(dataPoints, bet) {
   for (var i = 0; i < dataPoints.length; i++) {
@@ -54,10 +52,6 @@ exports.showBetItemsByMatch = function(req, res, dao) {
 // curl -X POST http://localhost:3000/admin/match -d 'key=xxx&no=1&score=3:0'
 // curl -H "Content-type: application/json" -X POST http://localhost:3000/admin/match -d '{"key":"xxx","no":1,"score":"3:0"}'
 exports.updateScore = function(req, res, dao) {
-  var keycode = req.body.key; // 验证
-  if (keycode == null || SHA1(keycode) !== key)
-    return res.send("无权限");
-  
   var no = parseInt(req.body.no);
   var score = req.body.score;
 
@@ -115,10 +109,6 @@ exports.showCalendar = function(req, res, dao) {
 
 // admin use
 exports.insertMatch = function(req, res, dao) {
-  var keycode = req.body.key; // 验证
-  if (keycode == null || SHA1(keycode) !== key)
-    return res.send("无权限");
-
   var match = req.body.match;
 
   dao.insertMatch(match, function(err, result) {
@@ -127,10 +117,6 @@ exports.insertMatch = function(req, res, dao) {
 };
 
 exports.createIndex = function(req, res, dao) {
-  var keycode = req.body.key; // 验证
-  if (keycode == null || SHA1(keycode) !== key)
-    return res.send("无权限");
-
   var col = req.body.col;
   var index = req.body.index;
   var options = req.body.options;

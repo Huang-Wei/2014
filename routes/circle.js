@@ -1,10 +1,6 @@
 // var dao = require('../dao');
 
 exports.index = function(req, res, dao) {
-  if (req.session.user == null) {
-    return res.redirect('/user/login');
-  }
-
   dao.getMyCircles(req.session.user, function(err, items) {
     if (err || items == null) {
       console.log(err);
@@ -44,18 +40,10 @@ exports.showBoard = function(req, res, dao) {
 };
 
 exports.createView = function(req, res, dao) {
-  if (req.session.user == null) {
-    return res.redirect('/user/login');
-  }
-
   res.render('circle/create');
 };
 
 exports.create = function(req, res, dao) {
-  if (req.session.user == null) {
-    return res.redirect('/user/login');
-  }
-
   var circle = {
     name: req.body.name,
     desc: req.body.desc,
@@ -69,10 +57,6 @@ exports.create = function(req, res, dao) {
 };
 
 exports.join = function(req, res, dao) {
-  if (req.session.user == null) {
-    return res.redirect('/user/login');
-  }
-
   var circleName = req.params.circleName;
   var user = req.session.user;
 
@@ -83,10 +67,6 @@ exports.join = function(req, res, dao) {
 };
 
 exports.quit = function(req, res, dao) {
-  if (req.session.user == null) {
-    return res.redirect('/user/login');
-  }
-
   var circleName = req.params.circleName;
   var user = req.session.user;
 
@@ -97,10 +77,6 @@ exports.quit = function(req, res, dao) {
 };
 
 exports.discard = function(req, res, dao) {
-  if (req.session.user == null) {
-    return res.redirect('/user/login');
-  }
-
   var circleName = req.params.circleName;
   var user = req.session.user;
 

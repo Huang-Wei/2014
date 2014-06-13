@@ -1,14 +1,7 @@
-// var dao = require('../dao');
 var util = require('../util');
 
 exports.showVoteResults = function(req, res, dao) {
-  var user = req.session.user;
-  if (user == null || user === '') {
-    res.send("用户未登陆");
-    return res.redirect('/user/login');
-  }
-
-  dao.getVoteItemsByUser(user, function(err, bet) {
+  dao.getVoteItemsByUser(req.session.user, function(err, bet) {
     // bet为一个长度为64的空数组
     if (err) {
       console.log(err);
@@ -53,13 +46,6 @@ exports.showVoteResults = function(req, res, dao) {
 exports.vote = function(req, res, dao) {
   var result = {};
 
-  var user = req.session.user;
-  if (user == null || user === '') {
-    result.msg = 'alert-warning';
-    result.msg = '用户未登陆';
-    return res.send(result);
-  }
-
   var score1 = req.body.score1;
   var score2 = req.body.score2;
   var rowno = req.body.rowno;
@@ -72,7 +58,7 @@ exports.vote = function(req, res, dao) {
     return res.send(result); // 可能是用户在改系统时间...
   }
 
-  dao.vote(user, score1+":"+score2, rowno, function(err) {
+  dao.vote(req.session.user, score1+":"+score2, rowno, function(err) {
     if (err) {
       result.msg = '竞猜比分失败:' + err;
       result.css = 'alert-danger';
@@ -87,16 +73,9 @@ exports.vote = function(req, res, dao) {
 exports.voteAll = function(req, res, dao) {
   var result = {};
 
-  var user = req.session.user;
-  if (user == null || user === '') {
-    result.msg = 'alert-warning';
-    result.msg = '用户未登陆';
-    return res.send(result);
-  }
-
   var update = req.body.update;
 
-  dao.voteAll(user, update, function(err) {
+  dao.voteAll(req.session.user, update, function(err) {
     if (err) {
       result.msg = '批量竞猜比分失败:' + err;
       result.css = 'alert-danger';
