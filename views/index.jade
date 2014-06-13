@@ -1,6 +1,13 @@
 extends layout
 
 block content
+  .alert.alert-info.alert-dismissable
+    button.close(type="button" data-dismiss="alert" aria-hidden="true") &times;
+    p
+      strong 2014.6.13 update:
+    p 1. 取消总积分榜的top10限制：现在会显示所有的用户结果
+    p 2. 显示单场竞猜结果时，去掉“未竞猜”选项
+    p 有任何bug和使用问题，请联系hweicdl@cn.ibm.com。请大家继续爱我:-)
   .jumbotron
     h1 你，我的世界杯竞猜之旅
     hr 

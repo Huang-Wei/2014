@@ -22,21 +22,24 @@ exports.showBetItemsByMatch = function(req, res, dao) {
     // 重新组织数据
     var dataPoints = [];
     items.forEach(function(item) {
-      var bet = item.bet[0] == null ? '未竞猜' : item.bet[0];
+      // 不在图表中显示未竞猜项
+      if (item.bet[0] != null) {
+        // var bet = item.bet[0] == null ? '未竞猜' : item.bet[0];
+        var bet = item.bet[0];
+        var index = getIndexInArray(dataPoints, bet);
 
-      var index = getIndexInArray(dataPoints, bet);
-
-      if (index != null) {
-        dataPoints[index].y++;
-        dataPoints[index].name.push(item.showname);
-      }
-      else {
-        var data = {};
-        data.label = bet;
-        data.y = 1;
-        data.name = new Array(item.showname);
-        // data.x = (dataPoints.length+1)*10
-        dataPoints.push(data);
+        if (index != null) {
+          dataPoints[index].y++;
+          dataPoints[index].name.push(item.showname);
+        }
+        else {
+          var data = {};
+          data.label = bet;
+          data.y = 1;
+          data.name = new Array(item.showname);
+          // data.x = (dataPoints.length+1)*10
+          dataPoints.push(data);
+        }
       }
     });
 

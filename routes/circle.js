@@ -6,7 +6,7 @@ exports.index = function(req, res, dao) {
   }
 
   dao.getMyCircles(req.session.user, function(err, items) {
-    if (err) {
+    if (err || items == null) {
       console.log(err);
       return res.render('circle/index', {items:{}});
     }

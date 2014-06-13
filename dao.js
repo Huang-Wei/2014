@@ -68,7 +68,7 @@ function dao(db) {
         if (err) return callback(err);
         if (items.length == 0)
           return callback("无人投票");
-        
+
         var cbCheck = 0;
         (function() {
           items.forEach(function(item, index) {
@@ -90,7 +90,8 @@ function dao(db) {
   function getBoard(query, callback) {
     // top 10
     if (query == null) {
-      db.collection('bet').find({}, {_id:0, bet:0}).sort({betscore:-1}).limit(10).toArray(function(err, items) {
+      //remove limit(10)
+      db.collection('bet').find({}, {_id:0, bet:0}).sort({betscore:-1}).toArray(function(err, items) {
         callback(err, items);
       });
     }
@@ -133,8 +134,8 @@ function dao(db) {
   // 我的圈子：当前用户的圈子 > 所有圈子的信息
   function getMyCircles(user, callback) {
     db.collection('user').find({user: user}, {circle: 1}).nextObject(function(err, item) {
-      if (err) {
-        return callback(err);
+      if (err || item.circle == null) {
+        return callback(err, null);
       }
       console.log("User Circle item="+item);
       
