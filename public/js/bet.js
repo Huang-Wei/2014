@@ -2,7 +2,7 @@ function popupMsg(css, msg, matchid) {
   $("#popup").addClass(css);
   $("#popup").empty().append(msg);
   $("#popup").show();
-  $("#popup").delay(2500).fadeOut(1000, function() {
+  $("#popup").delay(2000).fadeOut(500, function() {
     // console.log("callback fadeout");
     if (matchid === 'all')
       $("#subAll").removeAttr('disabled');

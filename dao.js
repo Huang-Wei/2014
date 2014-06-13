@@ -14,7 +14,7 @@ function dao(db) {
 
   // 返回某场比赛竞猜结果
   function getBetItemsByMatch(no, callback) {
-    db.collection('bet').find({}, {_id:0, user:1, showname:1, bet: {$slice: [no-1,no]}}).toArray(function(err, items) {
+    db.collection('bet').find({}, {_id:0, user:1, showname:1, bet: {$slice: [no-1,1]}}).toArray(function(err, items) {
       // console.log("items="+items);
       if (err) {
         return callback(err, items);

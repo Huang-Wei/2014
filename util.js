@@ -1,10 +1,10 @@
 exports.getURL = function() {
-  var url = 'mongodb://localhost:27017/2014?maxPoolSize=50';
+  var url = 'mongodb://localhost:27017/2014?maxPoolSize=100';
   if (process.env.VCAP_SERVICES) {
     var env = JSON.parse(process.env.VCAP_SERVICES);
     url = env['mongodb-2.2'][0].credentials.url
-      // + '?connectTimeoutMS=5000&socketTimeoutMS=30000';
-      + '?maxPoolSize=30';
+      + '?maxPoolSize=30&connectTimeoutMS=5000&socketTimeoutMS=30000';
+      // + '?maxPoolSize=30';
   }
   return url;
 };
