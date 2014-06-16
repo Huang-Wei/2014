@@ -2,12 +2,16 @@ extends layout
 
 block content
   .page-header
-    h2 我的竞猜
+    h2
+      我的竞猜
 
-  table.table.table-hover.table-condensed(id="myTable")
+
+  table.table.table-hover.table-condensed
     tbody
     each item in items
       tr
+        td(align="right")
+          input.checkbox(type="checkbox" id="ck#{item.no}")
         if item.hideDate
           td 
         else
@@ -18,11 +22,11 @@ block content
           //img.flag.img-thumbnail(src='/images/wc2014/#{item.flag1}.png')
           div(class="flag flag-#{item.flag1}")
         td(align="center") #{item.team1}
-        td
-          input.score(value="#{item.score1}") 
+        td(align="center")
+          input.score(type="text" value="#{item.score1}") 
         td(align="center") :
-        td
-          input.score(value="#{item.score2}") 
+        td(align="center")
+          input.score(type="text" value="#{item.score2}") 
         td(align="center") #{item.team2}
         td(align="center")
           //img.flag.img-thumbnail(src='/images/wc2014/#{item.flag2}.png')
