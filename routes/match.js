@@ -13,6 +13,11 @@ exports.showBetItemsByMatch = function(req, res, dao) {
   var no = parseInt(req.params.no); // match number
 
   dao.getBetItemsByMatch(no, function(err, items, match) {
+    // 如果比赛未开始，则不显示竞猜比分的人员名细
+    var matchTime = match.time;
+    var thisTime = new Date();
+    var showName = thisTime < matchTime ? false : true;
+
     if (err) {
       console.log(err);
       return;
@@ -28,13 +33,17 @@ exports.showBetItemsByMatch = function(req, res, dao) {
 
         if (index != null) {
           dataPoints[index].y++;
-          dataPoints[index].name.push(item.showname);
+          if (showName)
+            dataPoints[index].name.push(item.showname);
         }
         else {
           var data = {};
           data.label = bet;
           data.y = 1;
-          data.name = new Array(item.showname);
+          if (showName)
+            data.name = new Array(item.showname);
+          else
+            data.name = [];
           // data.x = (dataPoints.length+1)*10
           dataPoints.push(data);
         }
